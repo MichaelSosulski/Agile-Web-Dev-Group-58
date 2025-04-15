@@ -3,6 +3,10 @@
     display: inline-block;
 }
 
+.dropdown ul {
+    list-style-type: none;
+}
+
 .navbar {
 background-color: lightgoldenrodyellow;
 }
@@ -13,7 +17,8 @@ background-color: lightgoldenrodyellow;
     min-width: 100%;
     border: 1px solid black;
     padding: 20px;
-    top: 50px; 
+    top: 50px;
+    border-radius: 10px;
     background-color: darkkhaki;
     overflow: auto;
     z-index: 1;
