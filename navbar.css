@@ -5,12 +5,19 @@
 
 .dropdown-content {
     position: absolute;
-    display: none;
     right: 0;
     min-width: 100%;
     background-color: orange;
     overflow: auto;
     z-index: 1;
+}
+
+#loginDropdown {
+    display: none;
+}
+
+#signupDropdown {
+    display: none;
 }
 
 .show {
