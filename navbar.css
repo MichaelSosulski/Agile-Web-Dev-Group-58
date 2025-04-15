@@ -3,11 +3,18 @@
     display: inline-block;
 }
 
+.navbar {
+background-color: lightgoldenrodyellow;
+}
+
 .dropdown-content {
     position: absolute;
-    right: 0;
+    right:3%;
     min-width: 100%;
-    background-color: orange;
+    border: 1px solid black;
+    padding: 20px;
+    top: 50px; 
+    background-color: darkkhaki;
     overflow: auto;
     z-index: 1;
 }
