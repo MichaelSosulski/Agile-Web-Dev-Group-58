@@ -21,14 +21,38 @@
                 <li class="dropdown"><a id="loginBtn" href="#">Login <span class="caret"></span></a>
                     <div id="myDropdown" class="dropdown-content">
                             <ul>
-                                <li>login</li>
-                                <li>signup</li>
+                                <li class="login" onclick="dropForm('loginForm')">login</li>
+                                <li class="signup" onclick="dropForm('signupForm')">signup</li>
                             </ul>
                     </div>
                 </li>
             </ul>
         </div>
     </nav>
+
+    <div id="loginForm" class="form-container">
+        <legend>Login</legend>
+        <form>
+            <label for="loginEmail">Email:</label>
+            <input type="email" id="loginEmail" name="loginEmail" required><br><br>
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="loginPassword" required><br><br>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    
+    <div id="signupForm" class="form-container">
+        <legend>Signup</legend>
+        <form>
+            <label for="signupEmail">Email:</label>
+            <input type="email" id="signupEmail" name="signupEmail" required><br><br>
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" name="signupPassword" required><br><br>
+            <label for="signupConfirmPassword">Confirm Password:</label>
+            <input type="password" id="signupConfirmPassword" name="signupConfirmPassword" required><br><br>
+            <button type="submit">Signup</button>
+        </form>
+    </div>
 
     <script src="navbar.js"></script>
 </body>
