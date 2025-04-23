@@ -1,0 +1,25 @@
+section.container {
+    background-color: #ffffff;
+    border: 2px solid #0000ff;
+    padding: 30px 200px;
+    width: 80%;
+    text-align: center;
+}
+
+section.container h2 {
+    color: #000000;
+    margin-top: 20px;
+    text-align: left;
+}
+
+section.container p {
+    font-size: 1.5em;
+    color: #000000;
+    text-align: left;
+}
+
+.header-container {
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+}
