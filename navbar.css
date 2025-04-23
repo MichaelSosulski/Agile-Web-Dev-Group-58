@@ -3,14 +3,33 @@
     display: inline-block;
 }
 
+.dropdown ul {
+    list-style-type: none;
+}
+
+.navbar {
+background-color: lightgoldenrodyellow;
+}
+
 .dropdown-content {
     position: absolute;
-    display: none;
-    right: 0;
+    right:3%;
     min-width: 100%;
-    background-color: orange;
+    border: 1px solid black;
+    padding: 20px;
+    top: 50px;
+    border-radius: 10px;
+    background-color: darkkhaki;
     overflow: auto;
     z-index: 1;
+}
+
+#loginDropdown {
+    display: none;
+}
+
+#signupDropdown {
+    display: none;
 }
 
 .show {
