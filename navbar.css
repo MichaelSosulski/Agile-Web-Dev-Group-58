@@ -43,3 +43,50 @@ border-radius: 0;
 .show {
     display: block;
 }
+
+/*the following css below can be moved into a separate profile stylesheet */
+#welcomeuser {
+    margin-top:100px;
+}
+
+
+.profile-content ul {
+    list-style: none;  
+    padding-left: 0;   
+    margin: 0;        
+}
+
+
+.profile-content ul li {
+    margin-bottom: 20px; 
+}
+
+
+.profile-content ul .delete-account {
+    background-color: red;  
+    color: white;          
+    padding: 10px 20px;     
+    border-radius: 12px;     
+    display: block;         
+    text-align: center;     
+    text-decoration: none; 
+}
+
+
+.profile-content ul .delete-account:hover {
+    background-color: darkred;        
+}
+
+
+.button-container {
+    display: inline-block;
+    margin-top: 20px; 
+}
+
+.button-container button {
+    display: block;
+    width: 200px; 
+    height: 50px; 
+    font-size: 18px;
+    margin: 10px;
+}
