@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="header.css">
     <link rel="stylesheet" type="text/css" href="container.css">
     <link rel="stylesheet" type="text/css" href="movie.css">
-    <link rel="stylesheet" type="text/css" href="squares.css">
+    <link rel="stylesheet" type="text/css" href="hero.css">
     <title>Book Sharing Homepage</title>
 
 </head> 
@@ -16,7 +16,7 @@
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Book Sharing</a>
+                <a class="navbar-brand" href="#">FilmGraph</a>
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
@@ -61,34 +61,53 @@
             </ul>
         </div>
     </nav>
-    <div class="square-row">
-        <div class="square-box">
-            <h1>Welcome to <strong>-Name-</strong></h1>
-            <p>For scenes that stay with you long after the credits roll.</p>
-        </div>
-    
-        <div class="square-box">
-            <p>-Insert animation here.-</p>
-        </div>
-    </div>
-    
-    
-    <section class="container">
-        <p><strong>What this website does:</strong> Add current films, analyse your binge stats, and make friends to follow their journey.</p>
-        <h2>IMDB Top 10</h2>
-        <div class="movie-catalog">
-            <div class="movie-card">The Shawshank Redemption</div>
-            <div class="movie-card">The Godfather</div>
-            <div class="movie-card">The Dark Knight</div>
-            <div class="movie-card">The Godfather Part II</div>
-            <div class="movie-card">12 Angry Men</div>
-            <div class="movie-card">Schindler's List</div>
-            <div class="movie-card">LOTR: Return of the King</div>
-            <div class="movie-card">Pulp Fiction</div>
-            <div class="movie-card">The Good, the Bad and the Ugly</div>
-            <div class="movie-card">Fight Club</div>
+
+    <section class="hero-section container-fluid">
+        <div class="row min-vh-100">
+            <div class="col-md-6 h-100 hero-text">
+                <p class="hero-bold">Welcome To</p>
+                <h1 class="hero-bold">FilmGraph</h1>
+                <p>For scenes that stay with you long after the credits roll</p>
+            </div>
+            <div class="col-md-6 hero-image">
+                <img src="hero.png" alt="Films" class="img-fluid">
+            </div>
         </div>
     </section>
+    
+    <section class="feature-preview container">
+        <p>We'll help you <strong>track films</strong> you've watched, <strong>analyse</strong> your binge stats, 
+            and <strong>make friends</strong> to discover new films together.</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h1>InsightfStats</h1>    
+                <p>Description of feature.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="placeholder.jpg" alt="Feature">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <img src="placeholder.jpg" alt="Feature">
+            </div>
+            <div class="col-md-6">
+                <h1>Create Collections</h1>    
+                <p>Description of feature.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Watch with Friends</h1>    
+                <p>Description of feature.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="placeholder.jpg" alt="Feature">
+            </div>
+        </div>
 
     <script src="navbar.js"></script>
 </body>
