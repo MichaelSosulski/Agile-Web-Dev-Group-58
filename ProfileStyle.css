@@ -72,3 +72,11 @@ ul li a:hover {
 .dropdown-menu.show {
     display: block;
 }
+
+.title-line {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}

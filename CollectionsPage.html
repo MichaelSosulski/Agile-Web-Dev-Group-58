@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width", initial-scale="1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="profile.css">
+    <link rel="stylesheet" type="text/css" href="navbar.css">
+    <link rel="stylesheet" type="text/css" href="movie.css">
+    <script src="profile.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="addFilmDropdown.css">
+    
+
+    <title>FilmGraph Collections Page</title>
+    
+</head> 
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">FilmGraph</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Collections</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Stats</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Friends</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown"><a id="signupBtn" href="#">Profile <span class="caret"></span></a>
+                    <div id="signupDropdown" class="dropdown-content">
+                        <ul>
+                            <li>        
+                                <div id="signupForm" class="form-container">
+                                    <form>
+                                        <label for="signupEmail">Email:</label>
+                                        <input type="email" id="signupEmail" name="signupEmail" required><br><br>
+                                        <label for="signupPassword">Password:</label>
+                                        <input type="password" id="signupPassword" name="signupPassword" required><br><br>
+                                        <label for="signupConfirmPassword">Confirm Password:</label>
+                                        <input type="password" id="signupConfirmPassword" name="signupConfirmPassword" required><br><br>
+                                        <button type="submit">Signup</button>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <form action="/action_page.php">
+        <input type="text" placeholder="Find film in collection" name="search">
+    </form>
+    <br>
+    <div class="dropdown">
+        <button id="addBtn" type="button">Add new film</button>
+        <div id="addDropdown" class="dropdown-content drop-right">
+            <form>
+                <label for="filmTitle">Name of film: </label>
+                <input type="text" id="filmTitle" name="filmTitle">
+                <br>
+                <label for="releaseYear">Release Year: </label>
+                <input type="number" id="releaseYear" name="filmYear" min="1900">
+                <br>
+                <label for="watchDate">Watch Date (if movie seen): </label>
+                <input type="date" id="watchDate" name="watchDate">
+                <br>
+                <label for="starRating">Rating: </label>
+                <input type="radio" id="star1" name="starRating" value="1">
+                <label for="star1">1</label>
+                <input type="radio" id="star2" name="starRating" value="2">
+                <label for="star2">2</label>
+                <input type="radio" id="star3" name="starRating" value="3">
+                <label for="star3">3</label>
+                <input type="radio" id="star4" name="starRating" value="4">
+                <label for="star4">4</label>
+                <input type="radio" id="star5" name="starRating" value="5">
+                <label for="star5">5</label>
+                <br>
+                <label for="review">How was it?</label>
+                <input type="text" id="review" name="filmReview">
+                <br>
+                <input type="radio" id="addWatched" name="addToCategory" value="add to watched">
+                <label for="addWatched">already watched</label><br>
+                <input type="radio" id="addPlanned" name="addToCategory" value="add to planned">
+                <label for="addPlanned">planning to watch</label><br>
+                <button type="submit">Add</button>
+            </form> 
+        </div>
+    </div>
+
+
+    
+    <ul> 
+        <h1 style="font-weight: bold; text-decoration: underline;">My Collections</h1>
+        
+        <section class="container">
+            <h2>To watch</h2>
+            <div class="movie-catalog">
+                <div class="movie-card">The Shawshank Redemption</div>
+                <div class="movie-card">The Godfather</div>
+                <div class="movie-card">The Dark Knight</div>
+                <div class="movie-card">The Godfather Part II</div>
+                <div class="movie-card">12 Angry Men</div>
+                <div class="movie-card">Schindler's List</div>
+                <div class="movie-card">LOTR: Return of the King</div>
+                <div class="movie-card">Pulp Fiction</div>
+                <div class="movie-card">The Good, the Bad and the Ugly</div>
+                <div class="movie-card">Fight Club</div>
+            </div>
+            <h2>Favourites</h2>
+            <div class="movie-catalog">
+                <div class="movie-card">The Shawshank Redemption</div>
+                <div class="movie-card">The Godfather</div>
+                <div class="movie-card">The Dark Knight</div>
+                <div class="movie-card">The Godfather Part II</div>
+                <div class="movie-card">12 Angry Men</div>
+                <div class="movie-card">Schindler's List</div>
+                <div class="movie-card">LOTR: Return of the King</div>
+                <div class="movie-card">Pulp Fiction</div>
+                <div class="movie-card">The Good, the Bad and the Ugly</div>
+                <div class="movie-card">Fight Club</div>
+            </div>
+            <script src="navbar.js"></script>
+            <script src="addFilmDropdown.js"></script>
+</body>
+</html>
