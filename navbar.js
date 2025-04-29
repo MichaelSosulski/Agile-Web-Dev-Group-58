@@ -1,3 +1,4 @@
+//Make dropdown with dropdownId visible, hide all other dropdowns
 function toggleVisible(dropdownId) {
     const dropdown = document.getElementById(dropdownId);
 
@@ -33,5 +34,6 @@ window.addEventListener("click", (e) => {
       }
 })
 
+//Event handlers for login and signup buttons
 document.getElementById("loginBtn").addEventListener("click", function() {toggleVisible("loginDropdown"); });
 document.getElementById("signupBtn").addEventListener("click", function() {toggleVisible("signupDropdown"); });
