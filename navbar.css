@@ -3,10 +3,6 @@
     display: inline-block;
 }
 
-.dropdown ul {
-    list-style-type: none;
-}
-
 .navbar {
 background-color: #1C2331;
 margin-bottom: 0;
