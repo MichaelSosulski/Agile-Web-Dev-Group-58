@@ -21,7 +21,6 @@ border-radius: 0;
 
 .dropdown-content {
     position: absolute;
-    right:3%;
     min-width: 100%;
     border: 1px solid black;
     padding: 20px;
@@ -29,6 +28,14 @@ border-radius: 0;
     background-color: #817287;
     overflow: auto;
     z-index: 1;
+}
+
+.drop-right {
+    right: 3%;
+}
+
+.drop-left {
+    left: 3%;
 }
 
 #loginDropdown {
