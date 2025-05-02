@@ -15,6 +15,10 @@ border-radius: 0;
     color: #ffffff;
 }
 
+.navbar li a:hover {
+    color: #1C2331;
+}
+
 .dropdown-content {
     position: absolute;
     right:3%;
