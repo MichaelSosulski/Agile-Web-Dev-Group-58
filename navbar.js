@@ -8,5 +8,7 @@ function toggleVisible(dropdownId) {
     });
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
+
 document.getElementById("loginBtn").addEventListener("click", function() {toggleVisible("loginDropdown"); });
 document.getElementById("signupBtn").addEventListener("click", function() {toggleVisible("signupDropdown"); });
+document.getElementById("profileBtn").addEventListener("click", function() {toggleVisible("profileDropdown"); });
