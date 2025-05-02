@@ -15,6 +15,10 @@ border-radius: 0;
     color: #ffffff;
 }
 
+.navbar li.active a {
+    color: #b4d6f7;
+}
+
 .navbar li a:hover {
     color: #1C2331;
 }
