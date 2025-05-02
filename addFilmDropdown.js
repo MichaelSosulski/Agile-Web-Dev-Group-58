@@ -1,0 +1,1 @@
+document.getElementById("addBtn").addEventListener("click", function() {toggleVisible("addDropdown"); });

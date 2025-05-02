@@ -1,12 +1,3 @@
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown ul {
-    list-style-type: none;
-}
-
 .navbar {
 background-color: #1C2331;
 margin-bottom: 0;
@@ -19,23 +10,10 @@ border-radius: 0;
     color: #ffffff;
 }
 
-.dropdown-content {
-    position: absolute;
-    right:3%;
-    min-width: 100%;
-    border: 1px solid black;
-    padding: 20px;
-    top: 50px;
-    border-radius: 10px;
-    background-color: darkkhaki;
-    overflow: auto;
-    z-index: 1;
+.navbar li.active a {
+    color: #b4d6f7;
 }
 
-#loginDropdown {
-    display: none;
-}
-
-#signupDropdown {
-    display: none;
+.navbar li a:hover {
+    color: #1C2331;
 }
