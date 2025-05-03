@@ -17,7 +17,11 @@ def home():
                 "The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
 
-    return render_template('homepage.html', username=username, popular=popular, watchList=watchList)
+    recommended = [{"username": "Gary", "film": {"title": "Oppenheimer", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐⭐"}},
+                    {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
+                    {"username": "Sam", "film": {"title": "Jurassic Park", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐"}}]
+
+    return render_template('homepage.html', username=username, popular=popular, watchList=watchList, recommended=recommended)
 
 @app.route('/Profile')
 def profile():
