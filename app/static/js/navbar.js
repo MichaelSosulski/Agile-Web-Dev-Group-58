@@ -1,3 +1,11 @@
+/*Set the class of a navbar list item to "active" if the list item id is equal to
+ the second word in <title> tag*/
+ function setActiveNavbar () {
+    let pageName = document.title.split(' ')[1];
+    document.getElementById(pageName).className = "active";
+ }
+setActiveNavbar();
+
 //Make dropdown with dropdownId visible, hide all other dropdowns
 function toggleVisible(dropdownId) {
     const dropdown = document.getElementById(dropdownId);
