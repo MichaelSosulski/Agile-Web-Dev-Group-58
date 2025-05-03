@@ -8,7 +8,9 @@ def welcome():
 
 @app.route('/Homepage')
 def home():
-    return render_template('homepage.html')
+    username = "Insert Username Here"
+
+    return render_template('homepage.html', username=username)
 
 @app.route('/Profile')
 def profile():
