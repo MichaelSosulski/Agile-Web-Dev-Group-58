@@ -17,11 +17,11 @@ def profile():
 @app.route('/Collection')
 def collection():
     watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
-    "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-    "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
+                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
 
     favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
-    "LOTR: Return of the King", "Pulp Fiction"]
+                "LOTR: Return of the King", "Pulp Fiction"]
 
     planList = ["Oppenheimer", "Barbie"]
 
@@ -29,7 +29,13 @@ def collection():
 
 @app.route('/Friends')
 def friends():
-    return render_template('FriendsPage.html')
+    friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_2", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_3", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
+
+    return render_template('FriendsPage.html', friends=friends)
 
 @app.route('/Stats')
 def stats():
