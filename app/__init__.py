@@ -26,10 +26,6 @@ def friends():
 def stats():
     return render_template('StatsPage.html')
 
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
 if __name__ == '__main__':
     app.run()
 
