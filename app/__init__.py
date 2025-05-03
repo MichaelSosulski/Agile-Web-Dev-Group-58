@@ -8,7 +8,7 @@ def home():
 
 @app.route('/Profile')
 def profile():
-    return render_template('ProfilePgae.html')
+    return render_template('ProfilePage.html')
 
 @app.route('/Collection')
 def collection():
