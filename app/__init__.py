@@ -3,6 +3,10 @@ from flask import Flask,  render_template
 app = Flask(__name__)
 
 @app.route('/')
+def welcome():
+    return render_template('WelcomePage.html')
+
+@app.route('/Homepage')
 def home():
     return render_template('homepage.html')
 
@@ -21,10 +25,6 @@ def friends():
 @app.route('/Stats')
 def stats():
     return render_template('StatsPage.html')
-
-@app.route('/Welcome')
-def welcome():
-    return render_template('WelcomePage.html')
 
 @app.route('/index')
 def index():
