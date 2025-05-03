@@ -21,31 +21,21 @@
 
         <h2 style="font-weight: bold; text-decoration: underline;">My Collections</h2>
         <section class="container">
-            <h3>To watch</h3>
+            <h3>Watch List</h3>
             <div class="movie-catalog">
-                <div class="movie-card">The Shawshank Redemption</div>
-                <div class="movie-card">The Godfather</div>
-                <div class="movie-card">The Dark Knight</div>
-                <div class="movie-card">The Godfather Part II</div>
-                <div class="movie-card">12 Angry Men</div>
-                <div class="movie-card">Schindler's List</div>
-                <div class="movie-card">LOTR: Return of the King</div>
-                <div class="movie-card">Pulp Fiction</div>
-                <div class="movie-card">The Good, the Bad and the Ugly</div>
-                <div class="movie-card">Fight Club</div>
+                <div class="movie-catalog">
+                    {% for movie in watchList %}
+                    <div class="movie-card">{{movie}}</div>
+                    {% endfor %}
+                </div>
             </div>
             <h3>Favourites</h3>
             <div class="movie-catalog">
-                <div class="movie-card">The Shawshank Redemption</div>
-                <div class="movie-card">The Godfather</div>
-                <div class="movie-card">The Dark Knight</div>
-                <div class="movie-card">The Godfather Part II</div>
-                <div class="movie-card">12 Angry Men</div>
-                <div class="movie-card">Schindler's List</div>
-                <div class="movie-card">LOTR: Return of the King</div>
-                <div class="movie-card">Pulp Fiction</div>
-                <div class="movie-card">The Good, the Bad and the Ugly</div>
-                <div class="movie-card">Fight Club</div>
+                <div class="movie-catalog">
+                    {% for movie in favList %}
+                    <div class="movie-card">{{movie}}</div>
+                    {% endfor %}
+                </div>
             </div>
         </section>
         <h2 style="font-weight: bold; text-decoration: underline;">My Stats</h2>
