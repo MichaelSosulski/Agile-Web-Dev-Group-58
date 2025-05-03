@@ -16,7 +16,14 @@ def profile():
 
 @app.route('/Collection')
 def collection():
-    return render_template('CollectionPage.html')
+    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
+    "The Godfather Part II", "12 Angry Men", "Schindler's List", 
+    "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+
+    favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
+    "LOTR: Return of the King", "Pulp Fiction"]
+
+    return render_template('CollectionPage.html', watchList=watchList, favList=favList)
 
 @app.route('/Friends')
 def friends():
