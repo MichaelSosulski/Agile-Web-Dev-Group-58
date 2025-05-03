@@ -32,8 +32,14 @@ def profile():
     
     favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction"]
+
+    friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_2", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_3", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
+                {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
     
-    return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList)
+    return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
 @app.route('/Collection')
 def collection():
