@@ -1,40 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
+    {% extends "base.html" %}
 
-    <meta name="viewport" content="width=device-width", initial-scale="1">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/page.css') }}">
+    {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/container.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
    
-
     <title>FilmGraph Stats Page</title>
+    {% endblock %}
 
-</head> 
-<body>
-    <nav class="navbar">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">FilmGraph</a>
-            </div>
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('collection') }}">Collections</a></li>
-                <li class="active"><a href="{{ url_for('stats') }}">Stats</a></li>
-                <li><a href="{{ url_for('friends') }}">Friends</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="{{ url_for('profile') }}">Profile</a></li>
-          </ul>
-        </div>
-    </nav>
-
+    {% block content %}
     <h1 class="pageTitle">Movie Analytics</h1>
     <div class="feature-preview container">
         <div class="row">
@@ -67,9 +41,4 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
-
-    
-</body>
-</html>
+    {% endblock %}
