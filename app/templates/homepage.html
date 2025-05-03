@@ -13,32 +13,18 @@
     <section class="container">
         <h2>Popular Now</h2>
         <div class="movie-catalog">
-            <div class="movie-card">The Shawshank Redemption</div>
-            <div class="movie-card">The Godfather</div>
-            <div class="movie-card">The Dark Knight</div>
-            <div class="movie-card">The Godfather Part II</div>
-            <div class="movie-card">12 Angry Men</div>
-            <div class="movie-card">Schindler's List</div>
-            <div class="movie-card">LOTR: Return of the King</div>
-            <div class="movie-card">Pulp Fiction</div>
-            <div class="movie-card">The Good, the Bad and the Ugly</div>
-            <div class="movie-card">Fight Club</div>
+            {% for movie in popular %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
         </div>
     </section>
 
     <section class="container">
         <h2>Your Watchlist</h2>
         <div class="movie-catalog">
-            <div class="movie-card">The Shawshank Redemption</div>
-            <div class="movie-card">The Godfather</div>
-            <div class="movie-card">The Dark Knight</div>
-            <div class="movie-card">The Godfather Part II</div>
-            <div class="movie-card">12 Angry Men</div>
-            <div class="movie-card">Schindler's List</div>
-            <div class="movie-card">LOTR: Return of the King</div>
-            <div class="movie-card">Pulp Fiction</div>
-            <div class="movie-card">The Good, the Bad and the Ugly</div>
-            <div class="movie-card">Fight Club</div>
+            {% for movie in watchList %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
         </div>
     </section>
 

@@ -10,7 +10,14 @@ def welcome():
 def home():
     username = "Insert Username Here"
 
-    return render_template('homepage.html', username=username)
+    popular = ["The Dark Knight", "The Godfather Part II", "12 Angry Men", "Schindler's List", 
+                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+
+    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
+                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
+                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+
+    return render_template('homepage.html', username=username, popular=popular, watchList=watchList)
 
 @app.route('/Profile')
 def profile():
