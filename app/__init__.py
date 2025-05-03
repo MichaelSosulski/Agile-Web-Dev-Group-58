@@ -25,7 +25,7 @@ def home():
 
 @app.route('/Profile')
 def profile():
-    username = "Insert User Name"
+    user = {"name": "Insert User Name", "image": "static/images/placeholder.jpg", "bio": "My Bio"}
     watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
                 "The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
@@ -33,7 +33,7 @@ def profile():
     favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction"]
     
-    return render_template('ProfilePage.html', username=username, watchList=watchList, favList=favList)
+    return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList)
 
 @app.route('/Collection')
 def collection():

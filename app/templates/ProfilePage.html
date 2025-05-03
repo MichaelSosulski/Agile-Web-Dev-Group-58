@@ -10,11 +10,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1 class="pageTitle">{{username}}</h1>
-                <p>Bio</p>
+                <h1 class="pageTitle">{{user.name}}</h1>
+                <p>{{user.bio}}</p>
             </div>
             <div class="col-md-6">
-                <img src="placeholder.jpg" alt="Feature">
+                <img src={{user.image}} alt="User Profile Image">
             </div>
             
         </div>
