@@ -23,7 +23,9 @@ def collection():
     favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
     "LOTR: Return of the King", "Pulp Fiction"]
 
-    return render_template('CollectionPage.html', watchList=watchList, favList=favList)
+    planList = ["Oppenheimer", "Barbie"]
+
+    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)
 
 @app.route('/Friends')
 def friends():

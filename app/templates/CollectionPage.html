@@ -53,9 +53,15 @@
     </div>
 
     <section class="container">
-        <h2>To watch</h2>
+        <h2>Watch List</h2>
         <div class="movie-catalog">
             {% for movie in watchList %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
+        </div>
+        <h2>Planning to See</h2>
+        <div class="movie-catalog">
+            {% for movie in planList %}
             <div class="movie-card">{{movie}}</div>
             {% endfor %}
         </div>
