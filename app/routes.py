@@ -1,9 +1,16 @@
-from flask import render_template
+from flask import render_template, flash, redirect
 from app import app
 
-@app.route('/')
+from app.forms import LoginForm, SignupForm
+
+@app.route('/', methods=['GET', 'POST'])
 def welcome():
-    return render_template('WelcomePage.html')
+    lForm = LoginForm()
+    
+    if lForm.validate_on_submit():
+        flash('Login requested for user {}'.format(lForm.username.data))
+        return redirect('/Homepage')
+    return render_template('WelcomePage.html', lForm=lForm)
 
 @app.route('/Homepage')
 def home():
