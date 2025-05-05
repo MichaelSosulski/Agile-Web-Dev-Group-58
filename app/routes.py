@@ -1,5 +1,8 @@
-from flask import render_template
-from app import app
+from flask import request, redirect, url_for, render_template
+from app import app, db
+from app.models import Movies, Collections, Users
+from datetime import datetime
+from app.models import Collections, Movies
 
 @app.route('/')
 def welcome():
@@ -40,7 +43,7 @@ def profile():
     
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
-@app.route('/Collection')
+"""@app.route('/Collection')
 def collection():
     watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
                 "The Godfather Part II", "12 Angry Men", "Schindler's List", 
@@ -51,7 +54,7 @@ def collection():
 
     planList = ["Oppenheimer", "Barbie"]
 
-    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)
+    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)"""
 
 @app.route('/Friends')
 def friends():
@@ -66,3 +69,47 @@ def friends():
 @app.route('/Stats')
 def stats():
     return render_template('StatsPage.html')
+
+@app.route('/add_film', methods=['POST'])
+def add_film():
+    title = request.form.get('filmTitle')
+    release_year = request.form.get('filmYear')
+    watch_date = request.form.get('watchDate')
+    rating = request.form.get('starRating')
+    review = request.form.get('filmReview')
+    category = request.form.get('addToCategory')
+
+    user_id = 1
+
+    new_movie = Movies(
+        name=title,
+        release_year=int(release_year) if release_year else None,
+        watch_date=datetime.strptime(watch_date, "%Y-%m-%d") if watch_date else None,
+        rating=int(rating) if rating else None,
+        review=review
+    )
+    db.session.add(new_movie)
+    db.session.commit()
+
+    collection_entry = Collections(
+        user_id=user_id,
+        movie_id=new_movie.movie_id,
+        collection_name="default",
+        category=category
+    )
+    db.session.add(collection_entry)
+    db.session.commit()
+
+    return redirect(url_for('collection'))
+
+@app.route('/Collection')
+def collection():
+    user_id = 1
+    collections = Collections.query.filter_by(user_id=user_id).all()
+
+    watchList = [c.movie.name for c in collections if c.category == 'add to watched']
+    planList = [c.movie.name for c in collections if c.category == 'add to planned']
+    favList = [] 
+
+    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)
+
