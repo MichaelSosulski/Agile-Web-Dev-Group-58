@@ -2,7 +2,6 @@ from flask import request, redirect, url_for, render_template
 from app import app, db
 from app.models import Movies, Collections, Users
 from datetime import datetime
-from app.models import Collections, Movies
 
 @app.route('/')
 def welcome():
