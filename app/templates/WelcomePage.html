@@ -47,7 +47,7 @@
                                         <span style="color:red;">[{{ error }}]</span>
                                         {% endfor %}
                                     </p>
-                                    <p> {{ lForm.submit() }}</p>
+                                    <p> {{ lForm.submit_login() }}</p>
                                 </div>
                             </form>
                         </div>
@@ -56,16 +56,39 @@
                 <li class="dropdown"><a id="signupBtn" href="#">Sign Up <span class="caret"></span></a>
                     <div id="signupDropdown" class="dropdown-content drop-right">       
                         <div id="signupForm" class="form-container">
-                            <form>
-                                <label for="signupUsername">Username:</label><br>
-                                <input type="text" name="signupUsername" required><br><br>
-                                <label for="signupEmail">Email:</label><br>
-                                <input type="email" name="signupEmail" required><br><br>
-                                <label for="signupPassword">Password:</label><br>
-                                <input type="password" name="signupPassword" required><br><br>
-                                <label for="signupConfirmPassword">Confirm Password:</label><br>
-                                <input type="password" name="signupConfirmPassword" required><br><br>
-                                <button type="submit">Signup</button>
+                            <form name="signup" action="" method="post">
+                                <div class="form-group">
+                                    {{ sForm.hidden_tag() }}
+                                    <p>
+                                        {{ sForm.username.label }}<br>
+                                        {{ sForm.username(size=20) }}
+                                        {% for error in sForm.username.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ sForm.email.label }}<br>
+                                        {{ sForm.email }}
+                                        {% for error in sForm.email.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ sForm.password.label }}<br>
+                                        {{ sForm.password }}
+                                        {% for error in sForm.password.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ sForm.confirmPassword.label }}<br>
+                                        {{ sForm.confirmPassword }}
+                                        {% for error in sForm.confirmPassword.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p> {{ sForm.submit_signup() }}</p>
+                                </div>
                             </form>
                         </div>
                     </div>

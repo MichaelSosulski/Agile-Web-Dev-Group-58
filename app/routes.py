@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, request
 from app import app
 
 from app.forms import LoginForm, SignupForm
@@ -6,11 +6,17 @@ from app.forms import LoginForm, SignupForm
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
     lForm = LoginForm()
-    
-    if lForm.validate_on_submit():
+    sForm = SignupForm()
+
+    if 'submit_login' in request.form and lForm.validate_on_submit():
         flash('Login requested for user {}'.format(lForm.username.data))
+        print("login sent")
         return redirect('/Homepage')
-    return render_template('WelcomePage.html', lForm=lForm)
+    if 'submit_signup' in request.form and sForm.validate_on_submit():
+        flash('Sign up requested for user {}'.format(sForm.username.data))
+        #ADD NEW ACCOUNT INFORMATION TO DATABASE
+        print("sign up sent")
+    return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
 
 @app.route('/Homepage')
 def home():
