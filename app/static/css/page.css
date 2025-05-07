@@ -1,6 +1,13 @@
 /*Style elements within the page*/
+
+/*Keeps the page titles uniform*/
 .pageTitle {
     font-weight: bold; 
     text-decoration: underline;
     text-align: center;
+}
+
+/*For altering the unordered list element in a dropdown*/
+.dropdown ul {
+    list-style-type: none;
 }

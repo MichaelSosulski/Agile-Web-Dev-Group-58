@@ -43,14 +43,12 @@
                 </p>
                 <p>
                     {{ add_form.user_rating.label }}
-                    <ul>
                         {% for subfield in add_form.user_rating %}
-                        <li>
+                        <span>
                             {{ subfield.label }}
-                            {{ subfield }}
-                        </li>
+                            {{ subfield }} &ensp;
+                        <span>
                         {% endfor %}
-                    </ul>
                     {% for error in add_form.user_rating.errors %}
                     <span>[{{ error }}]</span>
                     {% endfor %}
