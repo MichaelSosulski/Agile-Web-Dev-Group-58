@@ -21,21 +21,21 @@
             <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
                 {{ add_form.hidden_tag() }}
                 <p>
-                    {{ add_form.film_title.label }}
+                    {{ add_form.film_title.label }}<br>
                     {{ add_form.film_title }}
                     {% for error in add_form.film_title.errors %}
                     <span>[{{ error }}]</span>
                     {% endfor %}
                 </p>
                 <p>
-                    {{ add_form.release_year.label }}
+                    {{ add_form.release_year.label }}<br>
                     {{ add_form.release_year }}
                     {% for error in add_form.release_year.errors %}
                     <span>[{{ error }}]</span>
                     {% endfor %}
                 </p>
                 <p>
-                    {{ add_form.watch_date.label }}
+                    {{ add_form.watch_date.label }}<br>
                     {{ add_form.watch_date }}
                     {% for error in add_form.watch_date.errors %}
                     <span>[{{ error }}]</span>

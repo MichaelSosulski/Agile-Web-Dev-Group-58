@@ -11,3 +11,8 @@
 .dropdown ul {
     list-style-type: none;
 }
+
+/*Set a min width for the addFilm dropdown*/
+#addDropdown {
+    min-width: 300px;
+}
