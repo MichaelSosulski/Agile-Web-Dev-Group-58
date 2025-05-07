@@ -3,7 +3,7 @@ from app import app, db
 from app.models import Movies, Collections, Users
 from datetime import datetime
 
-from app.forms import LoginForm, SignupForm
+from app.forms import LoginForm, SignupForm, AddFilmForm
 
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
@@ -84,44 +84,49 @@ def stats():
 
 @app.route('/add_film', methods=['POST'])
 def add_film():
-    title = request.form.get('filmTitle')
-    release_year = request.form.get('filmYear')
-    watch_date = request.form.get('watchDate')
-    rating = request.form.get('starRating')
-    review = request.form.get('filmReview')
-    category = request.form.get('addToCategory')
+    add_form = AddFilmForm()
 
-    user_id = 1
+    if add_form.validate_on_submit():
+        title = add_form.film_title.data
+        release_year = add_form.release_year.data
+        watch_date = add_form.watch_date.data
+        rating = add_form.user_rating.data
+        review = add_form.user_review.data
+        category = add_form.category.data
+        
+        user_id = 1
 
-    new_movie = Movies(
-        name=title,
-        release_year=int(release_year) if release_year else None,
-        watch_date=datetime.strptime(watch_date, "%Y-%m-%d") if watch_date else None,
-        rating=int(rating) if rating else None,
-        review=review
-    )
-    db.session.add(new_movie)
-    db.session.commit()
+        new_movie = Movies(
+            name=title,
+            release_year=int(release_year) if release_year else None,
+            watch_date=datetime.strptime(str(watch_date), "%Y-%m-%d") if watch_date else None,
+            rating=int(rating) if rating else None,
+            review=review
+        )
+        db.session.add(new_movie)
+        db.session.commit()
 
-    collection_entry = Collections(
-        user_id=user_id,
-        movie_id=new_movie.movie_id,
-        collection_name="default",
-        category=category
-    )
-    db.session.add(collection_entry)
-    db.session.commit()
+        collection_entry = Collections(
+            user_id=user_id,
+            movie_id=new_movie.movie_id,
+            collection_name="default",
+            category=category
+        )
+        db.session.add(collection_entry)
+        db.session.commit()
 
     return redirect(url_for('collection'))
 
 @app.route('/Collection')
 def collection():
+    add_film_form = AddFilmForm()
+    
     user_id = 1
     collections = Collections.query.filter_by(user_id=user_id).all()
 
-    watchList = [c.movie.name for c in collections if c.category == 'add to watched']
-    planList = [c.movie.name for c in collections if c.category == 'add to planned']
+    watchList = [c.movie.name for c in collections if c.category == 'Watched']
+    planList = [c.movie.name for c in collections if c.category == 'Planning To Watch']
     favList = [] 
 
-    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)
+    return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
