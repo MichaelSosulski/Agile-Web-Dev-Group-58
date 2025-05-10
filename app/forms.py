@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField, IntegerField,TextAreaField, RadioField, DateField, SubmitField
+from wtforms import StringField, HiddenField, EmailField, PasswordField, IntegerField,TextAreaField, RadioField, DateField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Optional
 
 class LoginForm(FlaskForm):
@@ -21,4 +21,12 @@ class AddFilmForm(FlaskForm):
     user_rating = RadioField("Rating:", choices=[1,2,3,4,5], validators=[DataRequired()])
     user_review = TextAreaField("How was it?", validators=[Optional()])
     category = RadioField("Category:", choices=["Watched", "Planning To Watch"], validators=[DataRequired()])
+
+    #hidden film data
+    director = HiddenField()
+    genres = HiddenField()
+    run_time = HiddenField()
+    plot = HiddenField()
+    poster_url = HiddenField()
+
     submit_film = SubmitField("Add film")

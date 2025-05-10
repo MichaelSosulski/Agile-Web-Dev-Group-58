@@ -67,6 +67,13 @@
                     <span>[{{ error }}]</span>
                     {% endfor %}
                 </p>
+                <p> <!--hidden form inputs-->
+                    {{ add_form.director }}
+                    {{ add_form.genres }}
+                    {{ add_form.run_time }}
+                    {{ add_form.plot }}
+                    {{ add_form.poster_url }}
+                </p>
                 <p> {{ add_form.submit_film() }}</p>
             </form>
         </div>
