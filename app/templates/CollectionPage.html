@@ -19,6 +19,7 @@
         <button id="addBtn" type="button">Add new film</button>
         <div id="addDropdown" class="dropdown-content drop-left">
             <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
+                <!--includes the csrf token and hidden film data fields-->
                 {{ add_form.hidden_tag() }}
                 <p>
                     {{ add_form.film_title.label }}<br>
@@ -67,13 +68,6 @@
                     <span>[{{ error }}]</span>
                     {% endfor %}
                 </p>
-                <p> <!--hidden form inputs-->
-                    {{ add_form.director }}
-                    {{ add_form.genres }}
-                    {{ add_form.run_time }}
-                    {{ add_form.plot }}
-                    {{ add_form.poster_url }}
-                </p>
                 <p> {{ add_form.submit_film() }}</p>
             </form>
         </div>
@@ -100,4 +94,6 @@
         </div>
 
         <script src="{{ url_for('static', filename='js/addFilmDropdown.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/filmRequest.js') }}"></script>
         {% endblock %}
