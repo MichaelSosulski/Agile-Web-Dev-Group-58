@@ -143,8 +143,8 @@ def collection():
     user_id = 1
     collections = Collection.query.filter_by(user_id=user_id).all()
 
-    watchList = [c.movie.title for c in collections if c.category == 'Watched']
-    planList = [c.movie.title for c in collections if c.category == 'Planning To Watch']
+    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
+    planList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Planning To Watch']
     favList = [] 
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
