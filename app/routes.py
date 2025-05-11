@@ -87,13 +87,21 @@ def add_film():
     add_form = AddFilmForm()
 
     if add_form.validate_on_submit():
+        #film data
         title = add_form.film_title.data
         release_year = add_form.release_year.data
+        director = add_form.director.data
+        genres = add_form.genres.data
+        run_time = add_form.run_time.data
+        plot = add_form.plot.data
+        poster_url = add_form.poster_url.data
+
+        #user watch data
         watch_date = add_form.watch_date.data
         rating = add_form.user_rating.data
         review = add_form.user_review.data
         category = add_form.category.data
-        
+
         user_id = 1
 
         new_movie = Movies(
