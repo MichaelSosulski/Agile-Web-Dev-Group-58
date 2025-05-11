@@ -1,6 +1,6 @@
 from flask import request, redirect, url_for, render_template, flash
 from app import app, db
-from app.models import Movies, Collections, Users
+from app.models import Movie, Collection, User
 from datetime import datetime
 
 from app.forms import LoginForm, SignupForm, AddFilmForm
@@ -104,20 +104,31 @@ def add_film():
 
         user_id = 1
 
-        new_movie = Movies(
-            name=title,
-            release_year=int(release_year) if release_year else None,
-            watch_date=datetime.strptime(str(watch_date), "%Y-%m-%d") if watch_date else None,
-            rating=int(rating) if rating else None,
-            review=review
+        new_movie = Movie(
+            title = title,
+            release_year = int(release_year) if release_year else None,
+            director = director,
+            run_time = run_time,
+            plot = plot,
+            poster = poster_url
         )
         db.session.add(new_movie)
         db.session.commit()
 
-        collection_entry = Collections(
+        for g in genres:
+            film_to_genre = MovieGenre(
+                movie_id = new_movie.movie_id,
+                genre = g
+            )
+            db.session.add(film_to_genre)
+            db.session.commit()
+
+        collection_entry = Collection(
             user_id=user_id,
             movie_id=new_movie.movie_id,
-            collection_name="default",
+            watch_date=datetime.strptime(str(watch_date), "%Y-%m-%d") if watch_date else None,
+            rating=int(rating) if rating else None,
+            review=review,
             category=category
         )
         db.session.add(collection_entry)
@@ -130,7 +141,7 @@ def collection():
     add_film_form = AddFilmForm()
     
     user_id = 1
-    collections = Collections.query.filter_by(user_id=user_id).all()
+    collections = Collection.query.filter_by(user_id=user_id).all()
 
     watchList = [c.movie.name for c in collections if c.category == 'Watched']
     planList = [c.movie.name for c in collections if c.category == 'Planning To Watch']
