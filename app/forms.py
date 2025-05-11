@@ -16,7 +16,7 @@ class SignupForm(FlaskForm):
 
 class AddFilmForm(FlaskForm):
     film_title = StringField("Film Title:", validators=[DataRequired()])
-    release_year = IntegerField("Release Year:", validators=[DataRequired()])
+    release_year = IntegerField("Release Year (optional):", validators=[Optional()])
     watch_date = DateField("Watch Date (if you've seen it):", validators=[Optional()])
     user_rating = RadioField("Rating:", choices=[1,2,3,4,5], validators=[DataRequired()])
     user_review = TextAreaField("How was it?", validators=[Optional()])

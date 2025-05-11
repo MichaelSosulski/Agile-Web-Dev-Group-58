@@ -1,5 +1,6 @@
 function submitFilmData(data) {
     //add film data to hidden form inputs
+	addFilmForm.elements["release_year"].value = data.release_year;
 	addFilmForm.elements["director"].value = data.directorName;
 	addFilmForm.elements["genres"].value = data.genres;
 	addFilmForm.elements["run_time"].value = data.runTime;
@@ -25,6 +26,7 @@ function getFilmData(filmId) {
 			const filmResponse = response.data.title;
             const filmData = {
             filmTitle: filmResponse.primary_title,
+			release_year: filmResponse.start_year,
 			directorName: filmResponse.directors[0].name.display_name,
 			genres: filmResponse.genres,
 			runTime: filmResponse.runtime_minutes,
@@ -42,11 +44,11 @@ function getFilmData(filmId) {
 	$.ajax(filmDataRequest);
 	};
 
-function getFilm(filmTitle) {
+function getFilm(filmTitle, year) {
 	const filmIdRequest = {
 		async: true,
 		crossDomain: true,
-		url: 'https://imdb.iamidiotareyoutoo.com/search?q=' + filmTitle,
+		url: 'https://imdb.iamidiotareyoutoo.com/search?q=' + filmTitle + ' ' + year,
 		method: 'GET',
 		dataType : 'json',
 		headers: {},
@@ -69,5 +71,6 @@ addFilmForm.addEventListener("submit", function(e) {
 	e.preventDefault(); //Prevents form submission
 
 	inputTitle = addFilmForm.elements["film_title"].value;
-	getFilm(inputTitle);
+	inputYear = addFilmForm.elements["release_year"].value;
+	getFilm(inputTitle, inputYear);
 })
