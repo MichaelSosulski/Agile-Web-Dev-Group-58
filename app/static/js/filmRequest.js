@@ -1,5 +1,16 @@
 function submitFilmData(data) {
-    //Disable submit button, add film data to hidden form inputs, submit to server
+    //add film data to hidden form inputs
+	addFilmForm.elements["director"].value = data.directorName;
+	addFilmForm.elements["genres"].value = data.genres;
+	addFilmForm.elements["run_time"].value = data.runTime;
+	addFilmForm.elements["plot"].value = data.plot;
+	addFilmForm.elements["poster_url"].value = data.poster;
+
+	//change user title to api response's film title
+	addFilmForm.elements["film_title"].value = data.filmTitle;
+
+	//submit form
+	addFilmForm.submit();
 }
 
 function getFilmData(filmId) {
@@ -11,9 +22,9 @@ function getFilmData(filmId) {
 		dataType : 'json',
 		headers: {},
 		success: function (response) {
-			const filmResponse = response.data;
+			const filmResponse = response.data.title;
             const filmData = {
-            filmTitle: filmResponse.title,
+            filmTitle: filmResponse.primary_title,
 			directorName: filmResponse.directors[0].name.display_name,
 			genres: filmResponse.genres,
 			runTime: filmResponse.runtime_minutes,
@@ -50,3 +61,13 @@ function getFilm(filmTitle) {
 	
 	$.ajax(filmIdRequest);
 	};
+
+const addFilmForm = document.forms["addFilmForm"];
+
+//event listener for when the user clicks submit on the form
+addFilmForm.addEventListener("submit", function(e) {
+	e.preventDefault(); //Prevents form submission
+
+	inputTitle = addFilmForm.elements["film_title"].value;
+	getFilm(inputTitle);
+})
