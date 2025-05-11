@@ -91,7 +91,7 @@ def add_film():
         title = add_form.film_title.data
         release_year = add_form.release_year.data
         director = add_form.director.data
-        genres = add_form.genres.data
+        genres = add_form.genres.data.split(',') #array of genres
         run_time = add_form.run_time.data
         plot = add_form.plot.data
         poster_url = add_form.poster_url.data
