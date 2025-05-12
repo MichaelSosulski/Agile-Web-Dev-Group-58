@@ -1,6 +1,6 @@
 from flask import request, redirect, url_for, render_template, flash
 from app import app, db
-from app.models import Movies, Collections, Users
+from app.models import Movie, Collection, User, MovieGenre
 from datetime import datetime
 
 from app.forms import LoginForm, SignupForm, AddFilmForm
@@ -87,29 +87,48 @@ def add_film():
     add_form = AddFilmForm()
 
     if add_form.validate_on_submit():
+        #film data
         title = add_form.film_title.data
         release_year = add_form.release_year.data
+        director = add_form.director.data
+        genres = add_form.genres.data.split(',') #array of genres
+        run_time = add_form.run_time.data
+        plot = add_form.plot.data
+        poster_url = add_form.poster_url.data
+
+        #user watch data
         watch_date = add_form.watch_date.data
         rating = add_form.user_rating.data
         review = add_form.user_review.data
         category = add_form.category.data
-        
+
         user_id = 1
 
-        new_movie = Movies(
-            name=title,
-            release_year=int(release_year) if release_year else None,
-            watch_date=datetime.strptime(str(watch_date), "%Y-%m-%d") if watch_date else None,
-            rating=int(rating) if rating else None,
-            review=review
+        new_movie = Movie(
+            title = title,
+            release_year = int(release_year) if release_year else None,
+            director = director,
+            run_time = run_time,
+            plot = plot,
+            poster = poster_url
         )
         db.session.add(new_movie)
         db.session.commit()
 
-        collection_entry = Collections(
+        for g in genres:
+            film_to_genre = MovieGenre(
+                movie_id = new_movie.movie_id,
+                genre = g
+            )
+            db.session.add(film_to_genre)
+            db.session.commit()
+
+        collection_entry = Collection(
             user_id=user_id,
             movie_id=new_movie.movie_id,
-            collection_name="default",
+            watch_date=datetime.strptime(str(watch_date), "%Y-%m-%d") if watch_date else None,
+            rating=int(rating) if rating else None,
+            review=review,
             category=category
         )
         db.session.add(collection_entry)
@@ -122,10 +141,10 @@ def collection():
     add_film_form = AddFilmForm()
     
     user_id = 1
-    collections = Collections.query.filter_by(user_id=user_id).all()
+    collections = Collection.query.filter_by(user_id=user_id).all()
 
-    watchList = [c.movie.name for c in collections if c.category == 'Watched']
-    planList = [c.movie.name for c in collections if c.category == 'Planning To Watch']
+    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
+    planList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Planning To Watch']
     favList = [] 
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)

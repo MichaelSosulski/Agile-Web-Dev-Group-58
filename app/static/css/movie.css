@@ -3,20 +3,37 @@
     overflow-x: auto;
     gap: 16px;
     padding: 20px 0;
-    text-align: center;
 }
 
 .movie-card {
     flex: 0 0 auto;
     width: 180px;
     height: 270px;
-    background-color: #ffffff;
-    border: 2px solid #000000;
-    padding: 10px;
+    border: 5px solid #000000;
     font-weight: bold;
     display: flex;
-    justify-content: center;
-    align-items: center;
     white-space: normal;
+    position: relative;
+}
+
+.movie-card > img {
+    object-fit: cover;
+    max-width: 170px;
+}
+
+.movie-card > p {
+    position: absolute;
+    left: 50%;
+    bottom: -30px;
+    transform: translate(-50%, -50%);
     text-align: center;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #817287;
+    visibility: hidden;
+}
+
+.movie-card:hover > p {
+    visibility: visible;
 }

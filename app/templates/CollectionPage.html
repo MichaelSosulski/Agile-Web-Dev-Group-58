@@ -11,86 +11,100 @@
     {% block content %}
     <h1 class="pageTitle">My Collections</h1>
     
-    <form action="/action_page.php">
-        <input type="text" placeholder="Find film in collection" name="search">
-    </form>
-    <br>
-    <div class="dropdown">
-        <button id="addBtn" type="button">Add new film</button>
-        <div id="addDropdown" class="dropdown-content drop-left">
-            <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
-                {{ add_form.hidden_tag() }}
-                <p>
-                    {{ add_form.film_title.label }}<br>
-                    {{ add_form.film_title }}
-                    {% for error in add_form.film_title.errors %}
-                    <span>[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ add_form.release_year.label }}<br>
-                    {{ add_form.release_year }}
-                    {% for error in add_form.release_year.errors %}
-                    <span>[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ add_form.watch_date.label }}<br>
-                    {{ add_form.watch_date }}
-                    {% for error in add_form.watch_date.errors %}
-                    <span>[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ add_form.user_rating.label }}
-                        {% for subfield in add_form.user_rating %}
-                        <span>
-                            {{ subfield.label }}
-                            {{ subfield }} &ensp;
-                        <span>
+    <div class="container">
+        <form action="/action_page.php">
+            <input type="text" placeholder="Find film in collection" name="search">
+        </form>
+        <br>
+        <div class="dropdown">
+            <button id="addBtn" type="button">Add new film</button>
+            <div id="addDropdown" class="dropdown-content drop-left">
+                <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
+                    <!--includes the csrf token and hidden film data fields-->
+                    {{ add_form.hidden_tag() }}
+                    <p>
+                        {{ add_form.film_title.label }}<br>
+                        {{ add_form.film_title }}
+                        {% for error in add_form.film_title.errors %}
+                        <span>[{{ error }}]</span>
                         {% endfor %}
-                    {% for error in add_form.user_rating.errors %}
-                    <span>[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ add_form.user_review.label }}
-                    {{ add_form.user_review }}
-                    {% for error in add_form.user_review.errors %}
-                    <span>[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p>
-                    {{ add_form.category.label }}
-                    {{ add_form.category }}
-                    {% for error in add_form.category.errors %}
-                    <span>[{{ error }}]</span>
-                    {% endfor %}
-                </p>
-                <p> {{ add_form.submit_film() }}</p>
-            </form>
+                    </p>
+                    <p>
+                        {{ add_form.release_year.label }}<br>
+                        {{ add_form.release_year }}
+                        {% for error in add_form.release_year.errors %}
+                        <span>[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ add_form.watch_date.label }}<br>
+                        {{ add_form.watch_date }}
+                        {% for error in add_form.watch_date.errors %}
+                        <span>[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ add_form.user_rating.label }}
+                            {% for subfield in add_form.user_rating %}
+                            <span>
+                                {{ subfield.label }}
+                                {{ subfield }} &ensp;
+                            <span>
+                            {% endfor %}
+                        {% for error in add_form.user_rating.errors %}
+                        <span>[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ add_form.user_review.label }}
+                        {{ add_form.user_review }}
+                        {% for error in add_form.user_review.errors %}
+                        <span>[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        {{ add_form.category.label }}
+                        {{ add_form.category }}
+                        {% for error in add_form.category.errors %}
+                        <span>[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p> {{ add_form.submit_film() }}</p>
+                </form>
+            </div>
         </div>
     </div>
 
     <section class="container">
         <h2>Watch List</h2>
         <div class="movie-catalog">
-            {% for movie in watchList %}
-            <div class="movie-card">{{movie}}</div>
+            {% for (title, poster) in watchList %}
+            <div class="movie-card">
+                <p>{{title}}</p>
+                <img src={{poster}} alt="{{'poster image of ' + title}}">
+            </div>
             {% endfor %}
         </div>
         <h2>Planning to See</h2>
         <div class="movie-catalog">
-            {% for movie in planList %}
-            <div class="movie-card">{{movie}}</div>
+            {% for (title, poster) in planList %}
+            <div class="movie-card">
+                <p>{{title}}</p>
+                <img src={{poster}} alt="{{'poster image of ' + title}}">
+            </div>
             {% endfor %}
         </div>
         <h2>Favourites</h2>
         <div class="movie-catalog">
-            {% for movie in favList %}
-            <div class="movie-card">{{movie}}</div>
+            {% for (title, poster) in favList %}
+            <div class="movie-card">
+                <p>{{title}}</p>
+                <img src={{poster}} alt="{{'poster image of ' + title}}">
+            </div>
             {% endfor %}
         </div>
 
         <script src="{{ url_for('static', filename='js/addFilmDropdown.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/filmRequest.js') }}"></script>
         {% endblock %}
