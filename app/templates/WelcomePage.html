@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <meta name="viewport" content="width=device-width", initial-scale="1">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/container.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
+
+
+    <title>FilmGraph Welcome Page</title>
+
+</head> 
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">FilmGraph</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown"><a id="loginBtn" href="#">Login <span class="caret"></span></a>
+                    <div id="loginDropdown" class="dropdown-content drop-right">       
+                        <div id="loginForm" class="form-container">
+                            <form name="login" action="" method="post">
+                                <div class="form-group">
+                                    {{ lForm.hidden_tag() }}
+                                    <p>
+                                        {{ lForm.username.label }}<br>
+                                        {{ lForm.username(size=20) }}
+                                        {% for error in lForm.username.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ lForm.password.label }}<br>
+                                        {{ lForm.password }}
+                                        {% for error in lForm.password.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p> {{ lForm.submit_login() }}</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                <li class="dropdown"><a id="signupBtn" href="#">Sign Up <span class="caret"></span></a>
+                    <div id="signupDropdown" class="dropdown-content drop-right">       
+                        <div id="signupForm" class="form-container">
+                            <form name="signup" action="" method="post">
+                                <div class="form-group">
+                                    {{ sForm.hidden_tag() }}
+                                    <p>
+                                        {{ sForm.username.label }}<br>
+                                        {{ sForm.username(size=20) }}
+                                        {% for error in sForm.username.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ sForm.email.label }}<br>
+                                        {{ sForm.email }}
+                                        {% for error in sForm.email.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ sForm.password.label }}<br>
+                                        {{ sForm.password }}
+                                        {% for error in sForm.password.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p>
+                                        {{ sForm.confirmPassword.label }}<br>
+                                        {{ sForm.confirmPassword }}
+                                        {% for error in sForm.confirmPassword.errors %}
+                                        <span style="color:red;">[{{ error }}]</span>
+                                        {% endfor %}
+                                    </p>
+                                    <p> {{ sForm.submit_signup() }}</p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero-section container-fluid">
+        <div class="row min-vh-100">
+            <div class="col-md-6 h-100 hero-text">
+                <p class="hero-bold">Welcome To</p>
+                <h1 class="hero-bold">FilmGraph</h1>
+                <p>For scenes that stay with you long after the credits roll</p>
+            </div>
+            <div class="col-md-6 hero-image">
+                <img src="{{ url_for('static', filename='images/hero.png') }}" alt="Films" class="img-fluid">
+            </div>
+        </div>
+    </section>
+    
+    <section class="feature-preview container">
+        <p>We'll help you <strong>track films</strong> you've watched, <strong>analyse</strong> your binge stats, 
+            and <strong>make friends</strong> to discover new films together.</p>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Insightful Stats</h1>    
+                <p>Description of feature.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+            </div>
+            <div class="col-md-6">
+                <h1>Create Collections</h1>    
+                <p>Description of feature.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Watch with Friends</h1>    
+                <p>Description of feature.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+            </div>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+
+</body>
+</html>

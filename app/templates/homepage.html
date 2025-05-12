@@ -1,0 +1,48 @@
+    {% extends "base.html" %}
+
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/container.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+
+    <title>FilmGraph Home Page</title>
+    {% endblock %}
+
+    {% block content %}
+    <h1 class="pageTitle">Welcome {{username}}!</h1>
+
+    <section class="container">
+        <h2>Popular Now</h2>
+        <div class="movie-catalog">
+            {% for movie in popular %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="container">
+        <h2>Your Watchlist</h2>
+        <div class="movie-catalog">
+            {% for movie in watchList %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="container mt-4">
+        <h2>Recommended by Friends</h2>
+        <div class="row">
+            {% for friend in recommended %}
+            <div class="col-md-4">
+                <div class="card">
+                    <img src={{friend.film.image}} class="card-img-top" alt="Movie Poster">
+                    <div class="card-body">
+                        <h5 class="card-title">Friend: {{friend.username}}</h5>
+                        <p class="card-text">Film: {{friend.film.title}}</p>
+                        <p>{{friend.film.rating}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}
