@@ -4,6 +4,8 @@ from app.models import Movie, Collection, User, MovieGenre
 from datetime import datetime
 
 from app.forms import LoginForm, SignupForm, AddFilmForm
+from flask import jsonify
+from sqlalchemy import func
 
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
@@ -80,7 +82,59 @@ def friends():
 
 @app.route('/Stats')
 def stats():
-    return render_template('StatsPage.html')
+    user_id = 1
+
+    # Top genres
+    genre_counts = (
+        db.session.query(MovieGenre.genre, func.count(MovieGenre.genre))
+        .join(Movie)
+        .join(Collection)
+        .filter(Collection.user_id == user_id)
+        .group_by(MovieGenre.genre)
+        .all()
+    )
+    genres = [g[0] for g in genre_counts]
+    genre_values = [g[1] for g in genre_counts]
+
+    # Total watch time
+    total_watch_time = (
+        db.session.query(func.sum(Movie.run_time))
+        .join(Collection)
+        .filter(Collection.user_id == user_id, Collection.category == 'Watched')
+        .scalar()
+    ) or 0
+
+    # Watched films
+    watched_films = (
+        db.session.query(Movie.title, Collection.rating)
+        .join(Collection)
+        .filter(Collection.user_id == user_id, Collection.category == 'Watched')
+        .all()
+    )
+    watched_titles = [f[0] for f in watched_films]
+    watched_ratings = [f[1] if f[1] is not None else 0 for f in watched_films]
+
+    # Favourite directors
+    director_counts = (
+        db.session.query(Movie.director, func.count(Movie.director))
+        .join(Collection)
+        .filter(Collection.user_id == user_id, Collection.category == 'Watched')
+        .group_by(Movie.director)
+        .order_by(func.count(Movie.director).desc())
+        .all()
+    )
+    director_names = [d[0] for d in director_counts]
+    director_freqs = [d[1] for d in director_counts]
+
+    return render_template('StatsPage.html',
+                           genres=genres,
+                           genre_values=genre_values,
+                           watch_time=total_watch_time,
+                           watched_titles=watched_titles,
+                           watched_ratings=watched_ratings,
+                           director_names=director_names,
+                           director_freqs=director_freqs)
+
 
 @app.route('/add_film', methods=['POST'])
 def add_film():
