@@ -2,7 +2,7 @@ from flask import request, redirect, url_for, render_template, flash
 from app import app, db
 from app.models import Movie, Collection, User, MovieGenre
 from datetime import datetime
-from flask_login import current_user, login_user, login_required
+from flask_login import current_user, login_user, login_required, logout_user
 import sqlalchemy as sa
 from app.forms import LoginForm, SignupForm, AddFilmForm
 
@@ -30,7 +30,7 @@ def welcome():
         flash('Congratulations, you are now a registered user!')
         login_user(user)
         flash('Welcome, you are now logged in!')
-        return redirect(url_for('homepage')) 
+        return redirect('/Homepage')
         
     return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
 
@@ -156,3 +156,7 @@ def collection():
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('welcome'))
