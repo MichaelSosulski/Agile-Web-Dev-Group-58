@@ -34,6 +34,9 @@ class User(UserMixin, db.Model):
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     collection: so.WriteOnlyMapped['Collection'] = so.relationship(back_populates='user')
     
+    def get_id(self):
+        return str(self.user_id)
+    
     def __repr__(self):
         return '<User {}>'.format(self.username)
     
@@ -56,7 +59,7 @@ class Collection(db.Model):
     user = db.relationship('User', back_populates='collection')
     movie = db.relationship('Movie', back_populates='collection')
 
-#I think we should store firends as both way like A is a friend of B and B is also a friend of A
+#I think we should store friends as both way like A is a friend of B and B is also a friend of A
 class Friend(db.Model):
     friendship_id = db.Column(db.Integer, primary_key=True)
     friend_a_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
