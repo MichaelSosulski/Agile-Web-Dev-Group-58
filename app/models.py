@@ -30,7 +30,7 @@ class User(db.Model):
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
-    collection = db.relationship('Collection', back_populates='user')
+    collection: so.WriteOnlyMapped['Collection'] = so.relationship(back_populates='user')
     
     def __repr__(self):
         return '<User {}>'.format(self.username)
