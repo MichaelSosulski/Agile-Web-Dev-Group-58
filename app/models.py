@@ -1,6 +1,3 @@
-from typing import Optional
-import sqlalchemy as sa
-import sqlalchemy.orm as so
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -28,11 +25,11 @@ class MovieGenre(db.Model):
 
 #Users we just have username, email and password no salting just yet
 class User(UserMixin, db.Model):
-    user_id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
-    email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
-    password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
-    collection: so.WriteOnlyMapped['Collection'] = so.relationship(back_populates='user')
+    user_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, index=True, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=True)
+    collection = db.relationship('Collection', back_populates='user')
     
     def get_id(self):
         return str(self.user_id)
