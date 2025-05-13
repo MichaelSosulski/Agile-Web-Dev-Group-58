@@ -55,19 +55,6 @@ def profile():
     
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
-"""@app.route('/Collection')
-def collection():
-    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
-                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
-
-    favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction"]
-
-    planList = ["Oppenheimer", "Barbie"]
-
-    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)"""
-
 @app.route('/Friends')
 def friends():
     friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
