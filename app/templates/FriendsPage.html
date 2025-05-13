@@ -8,9 +8,32 @@
 
     {% block content %}
     <h1 class="pageTitle">My Friends</h1>
-    <ul>
-        {% for friend in friends %}
-        <li><img src={{friend.image}} alt="{{friend.username}} Picture" style="width:20px; height:20px; vertical-align:middle; margin-right:8px;">{{friend.username}}</li>
-        {% endfor %}
-    </ul>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-md-push-8">
+                <h3 class="pageTitle">Friend Requests</h3>
+                <ul>
+                    {% for user in requests %}
+                    <li>{{user.name}}<br>
+                        <a href="{{ url_for('accept_request', username=user.name) }}">
+                            <button type="button" class="btn btn-success">Accept</button>
+                        </a>
+                        <a href="{{ url_for('decline_request', username=user.name) }}">
+                            <button type="button" class="btn btn-danger">Decline</button>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-sm-8 col-md-pull-4">
+                <h3 class="pageTitle">Friend List</h3>
+                <ul>
+                    {% for friend in friends %}
+                    <li><img src={{friend.image}} alt="{{friend.username}} Picture" style="width:20px; height:20px; vertical-align:middle; margin-right:8px;">{{friend.username}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
     {% endblock %}
