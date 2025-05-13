@@ -32,6 +32,9 @@ class User(db.Model):
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     collection = db.relationship('Collection', back_populates='user')
     
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+    
 #User and movie are attibutes of a collection as a single movie can be in multiple collections
 class Collection(db.Model):
     collection_id = db.Column(db.Integer, primary_key=True)
