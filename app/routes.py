@@ -63,7 +63,30 @@ def friends():
                 {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
                 {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
 
-    return render_template('FriendsPage.html', friends=friends)
+    requests = [{"name":"Nico"}, {"name":"Thyler"}, {"name":"Michael"},{"name":"Tyson"}]
+
+    return render_template('FriendsPage.html', friends=friends, requests=requests)
+
+@app.route('/Friends/request/send/<username>')
+def send_request(username):
+    #Create Friend database row between users
+    #Set is_friend to False
+    return redirect(url_for('friends'))
+
+@app.route('/Friends/request/accept/<username>')
+def accept_request(username):
+    #CHANGE is_friend field to True
+    return redirect(url_for('friends'))
+
+@app.route('/Friends/request/decline/<username>')
+def decline_request(username):
+    #Remove relationship from Friend table
+    return redirect(url_for('friends'))
+
+@app.route('/Friends/request/remove/<username>')
+def remove_friend(username):
+    #Remove relationship from Friend table
+    return redirect(url_for('friends'))
 
 @app.route('/Stats')
 def stats():
