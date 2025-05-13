@@ -2,6 +2,7 @@ from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #Movie data
 class Movie(db.Model):
@@ -35,6 +36,12 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
     
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 #User and movie are attibutes of a collection as a single movie can be in multiple collections
 class Collection(db.Model):
     collection_id = db.Column(db.Integer, primary_key=True)
