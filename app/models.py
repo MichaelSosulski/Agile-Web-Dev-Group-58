@@ -42,11 +42,13 @@ class Collection(db.Model):
     user = db.relationship('User', back_populates='collection')
     movie = db.relationship('Movie', back_populates='collection')
 
-#I think we should store firends as both way like A is a friend of B and B is also a friend of A
+#Relationship between users for sharing of data mutually
 class Friend(db.Model):
     friendship_id = db.Column(db.Integer, primary_key=True)
-    friend_a_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    friend_b_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    friend_a_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False) #person sending request
+    friend_b_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False) #person receiving request
+    is_friend = db.Column(db.Boolean, nullable=False) #boolean that is False when only a request has been sent
+
     friend_a = db.relationship('User', foreign_keys=[friend_a_id])
     friend_b = db.relationship('User', foreign_keys=[friend_b_id])
     
