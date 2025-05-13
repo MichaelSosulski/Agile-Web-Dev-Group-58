@@ -2,7 +2,8 @@ from flask import request, redirect, url_for, render_template, flash
 from app import app, db
 from app.models import Movie, Collection, User, MovieGenre
 from datetime import datetime
-
+from flask_login import current_user, login_user
+import sqlalchemy as sa
 from app.forms import LoginForm, SignupForm, AddFilmForm
 
 @app.route('/', methods=['GET', 'POST'])
@@ -10,14 +11,27 @@ def welcome():
     lForm = LoginForm()
     sForm = SignupForm()
 
-    if 'submit_login' in request.form and lForm.validate_on_submit():
-        flash('Login requested for user {}'.format(lForm.username.data))
+    if 'submit_login' in request.form and lForm.validate_on_submit():    
+        user = db.session.scalar(
+            sa.select(User).where(User.username == lForm.username.data))
+        if user is None or not user.check_password(lForm.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('welcome'))
+        login_user(user)
+        flash('Logged in successfully')
         print("login sent")
         return redirect('/Homepage')
+    
     if 'submit_signup' in request.form and sForm.validate_on_submit():
-        flash('Sign up requested for user {}'.format(sForm.username.data))
-        #ADD NEW ACCOUNT INFORMATION TO DATABASE
-        print("sign up sent")
+        user = User(username=sForm.username.data, email=sForm.email.data)
+        user.set_password(sForm.password.data) 
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        login_user(user)
+        flash('Welcome, you are now logged in!')
+        return redirect(url_for('homepage')) 
+        
     return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
 
 @app.route('/Homepage')
