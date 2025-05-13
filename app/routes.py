@@ -2,7 +2,7 @@ from flask import request, redirect, url_for, render_template, flash
 from app import app, db
 from app.models import Movie, Collection, User, MovieGenre
 from datetime import datetime
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, login_required
 import sqlalchemy as sa
 from app.forms import LoginForm, SignupForm, AddFilmForm
 
@@ -35,6 +35,7 @@ def welcome():
     return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
 
 @app.route('/Homepage')
+@login_required
 def home():
     username = "Insert Username Here"
 
@@ -52,6 +53,7 @@ def home():
     return render_template('homepage.html', username=username, popular=popular, watchList=watchList, recommended=recommended)
 
 @app.route('/Profile')
+@login_required
 def profile():
     user = {"name": "Insert User Name", "image": "static/images/placeholder.jpg", "bio": "My Bio"}
     watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
@@ -70,6 +72,7 @@ def profile():
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
 @app.route('/Friends')
+@login_required
 def friends():
     friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
                 {"username":"Friend_2", "image":"static/images/placeholder.jpg"},
@@ -80,10 +83,12 @@ def friends():
     return render_template('FriendsPage.html', friends=friends)
 
 @app.route('/Stats')
+@login_required
 def stats():
     return render_template('StatsPage.html')
 
 @app.route('/add_film', methods=['POST'])
+@login_required
 def add_film():
     add_form = AddFilmForm()
 
@@ -138,6 +143,7 @@ def add_film():
     return redirect(url_for('collection'))
 
 @app.route('/Collection')
+@login_required
 def collection():
     add_film_form = AddFilmForm()
     
