@@ -195,6 +195,12 @@ def add_film():
 
     return redirect(url_for('collection'))
 
+@app.route('/get_film/<query>')
+@login_required
+def get_film(query):
+    films = get_movie_collection(current_user.user_id, search=query)
+    return films
+
 @app.route('/Collection')
 @login_required
 def collection():
@@ -220,29 +226,34 @@ def logout():
     logout_user()
     return redirect(url_for('welcome'))
 
-def get_movie_collection(user_id):
+def get_movie_collection(user_id, search=None):
     """
     Retrieves movie collection data for a given user, including movie details and genres.
     """
-    collections = Collection.query.filter_by(user_id=user_id).all()
+    if search:
+        collections = Collection.query.join(Movie).filter(Collection.user_id == user_id, Movie.title == search)
+    else:
+        collections = Collection.query.join(Movie).filter(Collection.user_id == user_id)
 
     # Process the results into a list of dictionaries
     results = []
-    for collection in collections:
-        movie = collection.movie
-        genres = [mg.genre for mg in movie.movie_genres]
-        results.append({
-            'movie_id': movie.movie_id,
-            'title': movie.title,
-            'poster': movie.poster,
-            'release_year': movie.release_year,
-            'plot': movie.plot,
-            'director': movie.director,
-            'run_time': movie.run_time,
-            'watch_date': collection.watch_date,
-            'rating': collection.rating,
-            'review': collection.review,
-            'genres': ", ".join(genres),  # String of genres
-            'category': collection.category,
-        })
-    return results
+    if collections != None:
+        for collection in collections:
+            movie = collection.movie
+            genres = [mg.genre for mg in movie.movie_genres]
+            results.append({
+                'movie_id': movie.movie_id,
+                'title': movie.title,
+                'poster': movie.poster,
+                'release_year': movie.release_year,
+                'plot': movie.plot,
+                'director': movie.director,
+                'run_time': movie.run_time,
+                'watch_date': collection.watch_date,
+                'rating': collection.rating,
+                'review': collection.review,
+                'genres': ", ".join(genres),  # String of genres
+                'category': collection.category,
+            })
+        return results
+    return None
