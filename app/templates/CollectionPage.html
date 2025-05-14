@@ -9,7 +9,7 @@
     {% endblock %}
 
     {% block content %}
-    <h1 class="pageTitle">My Collections</h1>
+    <h1 class="pageHeading">Collections</h1>
     
     <div class="container">
         <form action="/action_page.php">
@@ -76,7 +76,7 @@
     </div>
 
     <section class="container">
-        <h2>Watch List</h2>
+        <h2 class="sectionHeading">Watched</h2>
         <div class="movie-catalog">
             {% for (title, poster) in watchList %}
             <div class="movie-card">
@@ -85,7 +85,7 @@
             </div>
             {% endfor %}
         </div>
-        <h2>Planning to See</h2>
+        <h2 class="sectionHeading">To Watch</h2>
         <div class="movie-catalog">
             {% for (title, poster) in planList %}
             <div class="movie-card">
@@ -94,7 +94,7 @@
             </div>
             {% endfor %}
         </div>
-        <h2>Favourites</h2>
+        <h2 class="sectionHeading">Favourites</h2>
         <div class="movie-catalog">
             {% for (title, poster) in favList %}
             <div class="movie-card">
