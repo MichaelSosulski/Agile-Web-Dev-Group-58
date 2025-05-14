@@ -23,7 +23,7 @@ def welcome():
         return redirect('/Homepage')
     
     if 'submit_signup' in request.form and sForm.validate_on_submit():
-        user = User(username=sForm.username.data, email=sForm.email.data)
+        user = User(username=sForm.username.data)
         user.set_password(sForm.password.data) 
         db.session.add(user)
         db.session.commit()
