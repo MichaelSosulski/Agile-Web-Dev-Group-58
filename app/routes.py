@@ -44,9 +44,17 @@ def welcome():
 @login_required
 def home():
     username = current_user.username
-
-    popular = ["The Dark Knight", "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+    
+    popular = [
+        {"title": "The Dark Knight", "poster": "static/images/The_Dark_Knight.png"},
+        {"title": "The Godfather Part II", "poster": "static/images/The_Godfather_Part_II.png"},
+        {"title": "12 Angry Men", "poster": "static/images/12_Angry_Men.png"},
+        {"title": "Schindler's List", "poster": "static/images/Schindler's_List.png"},
+        {"title": "LOTR: Return of the King", "poster": "static/images/LOTR_Return_of_the_King.png"},
+        {"title": "Pulp Fiction", "poster": "static/images/Pulp_Fiction.png"},
+        {"title": "The Good, the Bad and the Ugly", "poster": "static/images/The_Good_the_Bad_and_the_Ugly.png"},
+        {"title": "Fight Club", "poster": "static/images/Fight_Club.png"}
+    ]
     
     collections = current_user.collection
     watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
