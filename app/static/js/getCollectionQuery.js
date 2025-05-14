@@ -51,6 +51,7 @@ function getUserFilmInfo(search) {
                     const userDiv = document.createElement("div");
                     userDiv.classList.add("col-md-5")
                     userDiv.innerHTML = `<br>
+                        <p>Status: ${film.category}</p>
                         <p>Watch Date: ${film.watch_date}</p>
                         <p>Rating: ${film.rating}/5</p>
                         <p>Review: ${film.review}</p>
