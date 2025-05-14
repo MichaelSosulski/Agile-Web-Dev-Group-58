@@ -65,10 +65,16 @@ function getFilm(filmTitle, year) {
 	};
 
 const addFilmForm = document.forms["addFilmForm"];
+const filmSubmit = addFilmForm.elements["submit_film"];
 
 //event listener for when the user clicks submit on the form
 addFilmForm.addEventListener("submit", function(e) {
 	e.preventDefault(); //Prevents form submission
+	
+	//Show that the request is loading
+	filmSubmit.disabled = true;
+	filmSubmit.value = "Loading...";
+	document.body.style.cursor = "wait";
 
 	inputTitle = addFilmForm.elements["film_title"].value;
 	inputYear = addFilmForm.elements["release_year"].value;
