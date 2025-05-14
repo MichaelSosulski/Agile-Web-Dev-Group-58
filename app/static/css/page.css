@@ -16,3 +16,14 @@
 #addDropdown {
     min-width: 300px;
 }
+
+/*Set Styling for the film search result*/
+#filmData {
+    background-color: #1C2331;
+    color: white;
+    border-radius: 5px;
+}
+
+#filmData img {
+    max-width: 100%;
+}
