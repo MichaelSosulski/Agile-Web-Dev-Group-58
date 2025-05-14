@@ -19,7 +19,7 @@
         </div>
         <br>
         <div class="dropdown">
-            <button id="addBtn" type="button">Add new film</button>
+            <button id="addBtn" class="btn btn-secondary" type="button">Add new film</button>
             <div id="addDropdown" class="dropdown-content drop-left">
                 <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
                     <!--includes the csrf token and hidden film data fields-->
