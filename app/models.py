@@ -23,11 +23,10 @@ class MovieGenre(db.Model):
 
     movie = db.relationship('Movie', back_populates='movie_genres')
 
-#Users we just have username, email and password no salting just yet
+# Users have username and hashed password
 class User(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, index=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=True)
     collection = db.relationship('Collection', back_populates='user')
     
