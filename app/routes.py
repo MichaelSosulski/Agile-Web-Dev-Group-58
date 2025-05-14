@@ -37,14 +37,13 @@ def welcome():
 @app.route('/Homepage')
 @login_required
 def home():
-    username = "Insert Username Here"
+    username = current_user.username
 
     popular = ["The Dark Knight", "The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
-
-    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
-                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+    
+    collections = current_user.collection
+    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
 
     recommended = [{"username": "Gary", "film": {"title": "Oppenheimer", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐⭐"}},
                     {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
@@ -108,7 +107,7 @@ def add_film():
         review = add_form.user_review.data
         category = add_form.category.data
 
-        user_id = 1
+        user_id = current_user.user_id
 
         new_movie = Movie(
             title = title,
@@ -147,7 +146,7 @@ def add_film():
 def collection():
     add_film_form = AddFilmForm()
     
-    user_id = 1
+    user_id = current_user.user_id
     collections = Collection.query.filter_by(user_id=user_id).all()
 
     watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
