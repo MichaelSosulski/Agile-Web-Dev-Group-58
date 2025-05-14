@@ -201,11 +201,17 @@ def collection():
     add_film_form = AddFilmForm()
     
     user_id = current_user.user_id
-    collections = Collection.query.filter_by(user_id=user_id).all()
-
-    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
-    planList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Planning To Watch']
+    collections = get_movie_collection(user_id)
+    watchList = []
+    planList = []
     favList = [] 
+    for item in collections:
+        if item['category'] == 'Watched':
+            watchList.append(item)
+        elif item['category'] == 'Planning To Watch':
+            planList.append(item)
+        elif item['category'] == 'Favourite':
+            favList.append(item)
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
@@ -213,3 +219,30 @@ def collection():
 def logout():
     logout_user()
     return redirect(url_for('welcome'))
+
+def get_movie_collection(user_id):
+    """
+    Retrieves movie collection data for a given user, including movie details and genres.
+    """
+    collections = Collection.query.filter_by(user_id=user_id).all()
+
+    # Process the results into a list of dictionaries
+    results = []
+    for collection in collections:
+        movie = collection.movie
+        genres = [mg.genre for mg in movie.movie_genres]
+        results.append({
+            'movie_id': movie.movie_id,
+            'title': movie.title,
+            'poster': movie.poster,
+            'release_year': movie.release_year,
+            'plot': movie.plot,
+            'director': movie.director,
+            'run_time': movie.run_time,
+            'watch_date': collection.watch_date,
+            'rating': collection.rating,
+            'review': collection.review,
+            'genres': ", ".join(genres),  # String of genres
+            'category': collection.category,
+        })
+    return results

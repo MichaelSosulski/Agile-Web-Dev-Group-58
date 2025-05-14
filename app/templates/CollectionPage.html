@@ -78,10 +78,26 @@
     <section class="container">
         <h2>Watch List</h2>
         <div class="movie-catalog">
-            {% for (title, poster) in watchList %}
+            {% for film in watchList %}
             <div class="movie-card">
-                <p>{{title}}</p>
-                <img src={{poster}} alt="{{'poster image of ' + title}}">
+                <p>{{film.title}}</p>
+                <img src={{film.poster}} alt="{{'poster image of ' + film.title}}">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for film in watchList %}
+            <div class="col-md-6">
+                    <p>Title: {{film.title}} ({{film.release_year}})</p>
+                    <p>Genres: {{film.genres}}</p>
+                    <p>Director: {{film.director}}</p>
+                    <p>Run Time(min): {{film.run_time}}</p>
+                    <p>Plot: {{film.plot}}</p><br>
+            </div>
+            <div class="col-md-6">
+                    <p>Watched on {{film.watch_date}}</p>
+                    <p>Rating: {{film.rating}}/5</p>
+                    <p>Review: {{film.review}}</p>
             </div>
             {% endfor %}
         </div>
