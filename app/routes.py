@@ -86,7 +86,7 @@ def friends():
 @app.route('/Stats')
 @login_required
 def stats():
-    user_id = 1
+    user_id = current_user.user_id
 
     # Top genres
     genre_counts = (
