@@ -2,7 +2,8 @@ from flask import request, redirect, url_for, render_template, flash
 from app import app, db
 from app.models import Movie, Collection, User, MovieGenre
 from datetime import datetime
-
+from flask_login import current_user, login_user, login_required, logout_user
+import sqlalchemy as sa
 from app.forms import LoginForm, SignupForm, AddFilmForm
 from flask import jsonify
 from sqlalchemy import func
@@ -12,26 +13,39 @@ def welcome():
     lForm = LoginForm()
     sForm = SignupForm()
 
-    if 'submit_login' in request.form and lForm.validate_on_submit():
-        flash('Login requested for user {}'.format(lForm.username.data))
+    if 'submit_login' in request.form and lForm.validate_on_submit():    
+        user = db.session.scalar(
+            sa.select(User).where(User.username == lForm.username.data))
+        if user is None or not user.check_password(lForm.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('welcome'))
+        login_user(user)
+        flash('Logged in successfully')
         print("login sent")
         return redirect('/Homepage')
+    
     if 'submit_signup' in request.form and sForm.validate_on_submit():
-        flash('Sign up requested for user {}'.format(sForm.username.data))
-        #ADD NEW ACCOUNT INFORMATION TO DATABASE
-        print("sign up sent")
+        user = User(username=sForm.username.data)
+        user.set_password(sForm.password.data) 
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        login_user(user)
+        flash('Welcome, you are now logged in!')
+        return redirect('/Homepage')
+        
     return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
 
 @app.route('/Homepage')
+@login_required
 def home():
-    username = "Insert Username Here"
+    username = current_user.username
 
     popular = ["The Dark Knight", "The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
-
-    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
-                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+    
+    collections = current_user.collection
+    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
 
     recommended = [{"username": "Gary", "film": {"title": "Oppenheimer", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐⭐"}},
                     {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
@@ -40,6 +54,7 @@ def home():
     return render_template('homepage.html', username=username, popular=popular, watchList=watchList, recommended=recommended)
 
 @app.route('/Profile')
+@login_required
 def profile():
     user = {"name": "Insert User Name", "image": "static/images/placeholder.jpg", "bio": "My Bio"}
     watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
@@ -57,20 +72,8 @@ def profile():
     
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
-"""@app.route('/Collection')
-def collection():
-    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
-                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
-
-    favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction"]
-
-    planList = ["Oppenheimer", "Barbie"]
-
-    return render_template('CollectionPage.html', watchList=watchList, favList=favList, planList=planList)"""
-
 @app.route('/Friends')
+@login_required
 def friends():
     friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
                 {"username":"Friend_2", "image":"static/images/placeholder.jpg"},
@@ -81,6 +84,7 @@ def friends():
     return render_template('FriendsPage.html', friends=friends)
 
 @app.route('/Stats')
+@login_required
 def stats():
     user_id = 1
 
@@ -137,6 +141,7 @@ def stats():
 
 
 @app.route('/add_film', methods=['POST'])
+@login_required
 def add_film():
     add_form = AddFilmForm()
 
@@ -156,7 +161,7 @@ def add_film():
         review = add_form.user_review.data
         category = add_form.category.data
 
-        user_id = 1
+        user_id = current_user.user_id
 
         new_movie = Movie(
             title = title,
@@ -191,10 +196,11 @@ def add_film():
     return redirect(url_for('collection'))
 
 @app.route('/Collection')
+@login_required
 def collection():
     add_film_form = AddFilmForm()
     
-    user_id = 1
+    user_id = current_user.user_id
     collections = Collection.query.filter_by(user_id=user_id).all()
 
     watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
@@ -203,3 +209,7 @@ def collection():
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('welcome'))
