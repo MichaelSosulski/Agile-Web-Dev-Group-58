@@ -10,29 +10,35 @@ from app.forms import LoginForm, SignupForm, AddFilmForm
 def welcome():
     lForm = LoginForm()
     sForm = SignupForm()
+    show = None
 
-    if 'submit_login' in request.form and lForm.validate_on_submit():    
-        user = db.session.scalar(
-            sa.select(User).where(User.username == lForm.username.data))
-        if user is None or not user.check_password(lForm.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('welcome'))
-        login_user(user)
-        flash('Logged in successfully')
-        print("login sent")
-        return redirect('/Homepage')
-    
-    if 'submit_signup' in request.form and sForm.validate_on_submit():
-        user = User(username=sForm.username.data)
-        user.set_password(sForm.password.data) 
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered user!')
-        login_user(user)
-        flash('Welcome, you are now logged in!')
-        return redirect('/Homepage')
+    if 'submit_login' in request.form:
+        show = 'login'
+        if lForm.validate_on_submit():    
+            user = db.session.scalar(
+                sa.select(User).where(User.username == lForm.username.data))
+            if user is None or not user.check_password(lForm.password.data):
+                flash('Invalid username or password', 'error')
+                print("Login Errors:", lForm.errors)
+            else: 
+                login_user(user)
+                flash('Logged in successfully', 'success')
+                return redirect('/Homepage')
         
-    return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
+    elif 'submit_signup' in request.form:
+        show = 'signup'
+        if sForm.validate_on_submit():
+            user = User(username=sForm.username.data)
+            user.set_password(sForm.password.data) 
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            login_user(user)
+            flash('Welcome, you are now logged in!')
+            return redirect('/Homepage')
+            
+    return render_template('WelcomePage.html', lForm=lForm, sForm=sForm, 
+                            login_errors=lForm.errors, signup_errors=sForm.errors, show=show)
 
 @app.route('/Homepage')
 @login_required

@@ -52,3 +52,15 @@ document.getElementById("signupBtn").addEventListener("click", function(e) {
     // Toggle signup
     toggleVisible("signupDropdown");
 });
+
+// Show login or signup dropdown after reload if error flag is passed in the DOM
+document.addEventListener("DOMContentLoaded", () => {
+    const dropdownToShow = document.body.dataset.showDropdown;
+    if (dropdownToShow === "login") {
+        document.getElementById("loginDropdown").style.display = "block";
+        document.getElementById("signupDropdown").style.display = "none";
+    } else if (dropdownToShow === "signup") {
+        document.getElementById("signupDropdown").style.display = "block";
+        document.getElementById("loginDropdown").style.display = "none";
+    }
+});

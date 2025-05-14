@@ -17,7 +17,7 @@
     <title>FilmGraph Welcome Page</title>
 
 </head> 
-<body>
+<body data-show-dropdown="{{ show }}">
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -35,13 +35,13 @@
                                     {{ lForm.hidden_tag() }}
                                     <p>
                                         {{ lForm.username(class_="form-control", size=20, placeholder="Username") }}
-                                        {% for error in lForm.username.errors %}
+                                        {% for error in login_errors.username %}
                                         <span style="color:#d9534f;">{{ error }}</span>
                                         {% endfor %}
                                     </p>
                                     <p>
                                         {{ lForm.password(class_="form-control", size=20, placeholder="Password") }}
-                                        {% for error in lForm.password.errors %}
+                                        {% for error in login_errors.password %}
                                         <span style="color:#d9534f;">{{ error }}</span>
                                         {% endfor %}
                                     </p>

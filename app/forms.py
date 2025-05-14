@@ -9,6 +9,16 @@ class LoginForm(FlaskForm):
     username = StringField("Username:", validators=[DataRequired()])
     password = PasswordField("Password:", validators=[DataRequired()])
     submit_login = SubmitField("Login")
+    
+    def validate_username(self, username):
+        user = db.session.scalar(sa.select(User).where(User.username == username.data))
+        self.meta.user = user
+        if user is None:
+            raise ValidationError('User does not exist')
+        
+    def validate_password(self, password):
+        if self.meta.user and not self.meta.user.check_password(password.data):
+            raise ValidationError('Incorrect password')
 
 class SignupForm(FlaskForm):
     username = StringField("Username:", validators=[DataRequired()])
