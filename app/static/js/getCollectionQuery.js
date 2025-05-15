@@ -72,6 +72,15 @@ function getUserFilmInfo(search) {
                     deleteBtn.classList.add("btn-danger");
                     deleteBtn.innerText = "remove";
                     filmDiv.appendChild(deleteBtn);
+                    $(deleteBtn).click(function(){
+                        $.post(serverDomain + rmRoute,
+                        {
+                            id: film.movie_id
+                        },
+                        function(data, status){
+                        console.log("Status: " + status);
+                        });
+                    }); 
                     //Populate userDiv
                     const userDiv = document.createElement("div");
                     userDiv.classList.add("col-md-5")
