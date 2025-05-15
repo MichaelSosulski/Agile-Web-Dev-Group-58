@@ -213,7 +213,7 @@ def fav_film():
     user_id = current_user.user_id
     if request.method == 'POST':
         id = request.form['id']
-        film = Collection.query.join(Movie).filter(user_id == user_id,
+        film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
             Movie.movie_id == id, Collection.category == 'Watched').one_or_none()
         if film != None:
             film.category = 'Favourite'
@@ -221,6 +221,22 @@ def fav_film():
             db.session.commit()
         else:
             flash("film is not in Watched List")
+    return redirect(url_for('collection'))
+
+@app.route('/rm_film', methods=['POST'])
+@login_required
+def rm_film():
+    user_id = current_user.user_id
+    print(user_id)
+    if request.method == 'POST':
+        id = request.form['id']
+        film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
+           Movie.movie_id == id).one_or_none()
+        if film != None:
+            db.session.delete(film)
+            db.session.commit()
+        else:
+           flash("Can't delete non-existent collection item.")
     return redirect(url_for('collection'))
 
 @app.route('/get_film/<query>')
