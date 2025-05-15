@@ -47,6 +47,26 @@ function getUserFilmInfo(search) {
                         <p>${film.plot}</p>
                     `;
                     filmBox.appendChild(filmDiv);
+                    //favourite button
+                    const favLink = document.createElement("a");
+                    favLink.href = "/fav_film";
+                    const favBtn = document.createElement("btn");
+                    favBtn.type = "button";
+                    favBtn.classList.add("btn");
+                    favBtn.classList.add("btn-info");
+                    favBtn.innerText = "favourite";
+                    favLink.appendChild(favBtn);
+                    filmDiv.appendChild(favLink);
+                    //delete button
+                    const deleteLink = document.createElement("a");
+                    deleteLink.href = "/remove_film";
+                    const deleteBtn = document.createElement("btn");
+                    deleteBtn.type = "button";
+                    deleteBtn.classList.add("btn");
+                    deleteBtn.classList.add("btn-danger");
+                    deleteBtn.innerText = "remove";
+                    deleteLink.appendChild(deleteBtn);
+                    filmDiv.appendChild(deleteLink);
                     //Populate userDiv
                     const userDiv = document.createElement("div");
                     userDiv.classList.add("col-md-5")
