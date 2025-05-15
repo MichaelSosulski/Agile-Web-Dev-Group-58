@@ -38,3 +38,15 @@ class AddFilmForm(FlaskForm):
     poster_url = HiddenField()
 
     submit_film = SubmitField("Add film")
+    
+class SendRequestForm(FlaskForm):
+    submit = SubmitField('Send Request')
+
+class AcceptRequestForm(FlaskForm):
+    submit = SubmitField('Accept Request')
+
+class DeclineRequestForm(FlaskForm):
+    submit = SubmitField('Decline Request')
+
+class RemoveFriendForm(FlaskForm):
+    submit = SubmitField('Remove Friend') 
