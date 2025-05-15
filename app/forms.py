@@ -25,7 +25,7 @@ class SignupForm(FlaskForm):
 
 class AddFilmForm(FlaskForm):
     
-    film_title = StringField("Film Title:", validators=[DataRequired()])
+    film_title = StringField("Film Title:", validators=[DataRequired(), Length(max=50)])
     release_year = IntegerField("Release Year (optional):", validators=[NumberRange(min=1910, max=datetime.datetime.now().year)])
     watch_date = DateField("Watch Date (if you've seen it):")
     user_rating = RadioField("Rating:", choices=[1,2,3,4,5])
@@ -51,6 +51,8 @@ class AddFilmForm(FlaskForm):
     def validate_user_rating(form, field):
         if form.category.data == "Planning To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
+        if form.category.data == "Watched" and not field.data:
+            raise ValidationError("Error: Please input a rating")
         
     def validate_user_review(form, field):
         if form.category.data == "Planning To Watch" and field.data:
