@@ -163,6 +163,13 @@ def add_film():
 
         user_id = current_user.user_id
 
+        #Check if collection row is already in Collection
+        in_collection = Collection.query.join(Movie).filter(Collection.user_id == user_id,
+            Movie.title == title, Movie.release_year == release_year).one_or_none()
+        if in_collection != None:
+            flash("This film is already in your collection.")
+            return redirect(url_for('collection'))
+
         #Check if movie is already in db, if it is not, add it
         find_film = Movie.query.filter(Movie.title==title, Movie.release_year==release_year).one_or_none()
         if find_film is None:
