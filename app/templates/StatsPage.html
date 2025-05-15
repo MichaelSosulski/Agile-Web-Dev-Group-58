@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
 
 <title>FilmGraph Stats Page</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="{{ url_for('static', filename='js/stats.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -13,32 +15,36 @@
 <div class="feature-preview container">
     <div class="row">
         <div class="col-md-6">
-            <h1>Top Genres</h1>    
-            <p>Your top genres.</p>
+            <h3>Top Genres</h3>    
+            <div id="genreChart"></div>
         </div>
         <div class="col-md-6">
-            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
-        </div>
-        <div class="col-md-6">
-            <h1>Watch time statistic</h1>    
-            <p>Summary watch time.</p>
+            <h3>Watch Time</h3>    
+            <div id="watchTimeChart"></div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h1>Favourite directors</h1>    
-            <p>List of favourite directors.</p>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Your Watched Films</h3>
+            <div id="watchedFilmsChart"></div>
         </div>
-        <div class="col-md-6">
-            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Favourite Directors</h3>
+            <div id="directorChart"></div>
         </div>
     </div>
 </div>
+<script>
+    const chartGenres = {{ genres | tojson }};
+    const chartGenreValues = {{ genre_values | tojson }};
+    const chartWatchTime = {{ watch_time | tojson }};
+    const watchedTitles = {{ watched_titles | tojson }};
+    const watchedRatings = {{ watched_ratings | tojson }};
+    const directorNames = {{ director_names | tojson }};
+    const directorFreqs = {{ director_freqs | tojson }};
+</script>
 {% endblock %}
