@@ -61,8 +61,8 @@ function getUserFilmInfo(search) {
                         {
                             id: film.movie_id
                         },
-                        function(data, status){
-                        console.log("Status: " + status);
+                        function(){
+                        window.location.reload()
                         });
                     }); 
                     //delete button
@@ -77,8 +77,8 @@ function getUserFilmInfo(search) {
                         {
                             id: film.movie_id
                         },
-                        function(data, status){
-                        console.log("Status: " + status);
+                        function(){
+                        window.location.reload()
                         });
                     }); 
                     //Populate userDiv
