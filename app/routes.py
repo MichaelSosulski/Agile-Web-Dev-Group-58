@@ -163,24 +163,29 @@ def add_film():
 
         user_id = current_user.user_id
 
-        new_movie = Movie(
-            title = title,
-            release_year = int(release_year) if release_year else None,
-            director = director,
-            run_time = run_time,
-            plot = plot,
-            poster = poster_url
-        )
-        db.session.add(new_movie)
-        db.session.commit()
-
-        for g in genres:
-            film_to_genre = MovieGenre(
-                movie_id = new_movie.movie_id,
-                genre = g
+        #Check if movie is already in db, if it is not, add it
+        find_film = Movie.query.filter(Movie.title==title, Movie.release_year==release_year).one_or_none()
+        if find_film is None:
+            new_movie = Movie(
+                title = title,
+                release_year = int(release_year) if release_year else None,
+                director = director,
+                run_time = run_time,
+                plot = plot,
+                poster = poster_url
             )
-            db.session.add(film_to_genre)
+            db.session.add(new_movie)
             db.session.commit()
+
+            for g in genres:
+                film_to_genre = MovieGenre(
+                    movie_id = new_movie.movie_id,
+                    genre = g
+                )
+                db.session.add(film_to_genre)
+                db.session.commit()
+        else:
+            new_movie = find_film
 
         collection_entry = Collection(
             user_id=user_id,
