@@ -1,4 +1,5 @@
-# Agile-Web-Dev-Group-58
+# FilmGraph 
+CITS3403 Agile Web Development: Group 58
 
 ## Instructions: How to launch the application 
 
@@ -6,6 +7,7 @@
 
 ```bash
 python3 -m venv venv
+# if using Windows, you may need to use python -m venv venv
 source venv/bin/activate
 # if using Windows command prompt, use venv\Scripts\activate
 # if using Windows PowerShell, use venv\Scripts\Activate.ps1
@@ -33,6 +35,7 @@ Then you can set the secret key:
 ```bash
 export SECRET_KEY='secret_key' 
 # replace 'secret_key' with your generated key
+# on Windows use $env:SECRET_KEY='secret_key'
 ```
 
 ### Initialise database 

@@ -67,13 +67,6 @@
                                         {% endfor %}
                                     </p>
                                     <p>
-                                        {{ sForm.email.label }}<br>
-                                        {{ sForm.email }}
-                                        {% for error in sForm.email.errors %}
-                                        <span style="color:red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </p>
-                                    <p>
                                         {{ sForm.password.label }}<br>
                                         {{ sForm.password }}
                                         {% for error in sForm.password.errors %}
