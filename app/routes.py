@@ -13,36 +13,51 @@ def welcome():
     lForm = LoginForm()
     sForm = SignupForm()
 
-    if 'submit_login' in request.form and lForm.validate_on_submit():    
-        user = db.session.scalar(
-            sa.select(User).where(User.username == lForm.username.data))
-        if user is None or not user.check_password(lForm.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('welcome'))
-        login_user(user)
-        flash('Logged in successfully')
-        print("login sent")
-        return redirect('/Homepage')
-    
-    if 'submit_signup' in request.form and sForm.validate_on_submit():
-        user = User(username=sForm.username.data)
-        user.set_password(sForm.password.data) 
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered user!')
-        login_user(user)
-        flash('Welcome, you are now logged in!')
-        return redirect('/Homepage')
-        
-    return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
+    show = None
+
+    if 'submit_login' in request.form:
+        show = 'login'
+        if lForm.validate_on_submit():    
+            user = db.session.scalar(
+                sa.select(User).where(User.username == lForm.username.data))
+            if user is None or not user.check_password(lForm.password.data):
+                flash('Invalid username or password', 'error')
+                print("Login Errors:", lForm.errors)
+            else: 
+                login_user(user)
+                flash('Logged in successfully', 'success')
+                return redirect('/Homepage')
+              
+    elif 'submit_signup' in request.form:
+        show = 'signup'
+        if sForm.validate_on_submit():
+            user = User(username=sForm.username.data)
+            user.set_password(sForm.password.data) 
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            login_user(user)
+            flash('Welcome, you are now logged in!')
+            return redirect('/Homepage')
+            
+    return render_template('WelcomePage.html', lForm=lForm, sForm=sForm, 
+                            login_errors=lForm.errors, signup_errors=sForm.errors, show=show)
 
 @app.route('/Homepage')
 @login_required
 def home():
     username = current_user.username
-
-    popular = ["The Dark Knight", "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+    
+    popular = [
+        {"title": "The Dark Knight", "poster": "static/images/The_Dark_Knight.png"},
+        {"title": "The Godfather Part II", "poster": "static/images/The_Godfather_Part_II.png"},
+        {"title": "12 Angry Men", "poster": "static/images/12_Angry_Men.png"},
+        {"title": "Schindler's List", "poster": "static/images/Schindler's_List.png"},
+        {"title": "LOTR: Return of the King", "poster": "static/images/LOTR_Return_of_the_King.png"},
+        {"title": "Pulp Fiction", "poster": "static/images/Pulp_Fiction.png"},
+        {"title": "The Good, the Bad and the Ugly", "poster": "static/images/The_Good_the_Bad_and_the_Ugly.png"},
+        {"title": "Fight Club", "poster": "static/images/Fight_Club.png"}
+    ]
     
     collections = current_user.collection
     watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
