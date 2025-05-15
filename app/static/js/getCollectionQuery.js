@@ -1,5 +1,7 @@
 const serverDomain = "http://127.0.0.1:5000";
 const serverRoute = "/get_film/";
+const rmRoute = "/rm_film";
+const favRoute = "/fav_film";
 const searchBox = document.getElementById("searchFilm");
 const filmBox = document.getElementById("filmData");
 
@@ -48,25 +50,28 @@ function getUserFilmInfo(search) {
                     `;
                     filmBox.appendChild(filmDiv);
                     //favourite button
-                    const favLink = document.createElement("a");
-                    favLink.href = "/fav_film";
                     const favBtn = document.createElement("btn");
                     favBtn.type = "button";
                     favBtn.classList.add("btn");
                     favBtn.classList.add("btn-info");
                     favBtn.innerText = "favourite";
-                    favLink.appendChild(favBtn);
-                    filmDiv.appendChild(favLink);
+                    filmDiv.appendChild(favBtn);
+                    $(favBtn).click(function(){
+                        $.post(serverDomain + favRoute,
+                        {
+                            id: film.movie_id
+                        },
+                        function(data, status){
+                        console.log("Status: " + status);
+                        });
+                    }); 
                     //delete button
-                    const deleteLink = document.createElement("a");
-                    deleteLink.href = "/remove_film";
                     const deleteBtn = document.createElement("btn");
                     deleteBtn.type = "button";
                     deleteBtn.classList.add("btn");
                     deleteBtn.classList.add("btn-danger");
                     deleteBtn.innerText = "remove";
-                    deleteLink.appendChild(deleteBtn);
-                    filmDiv.appendChild(deleteLink);
+                    filmDiv.appendChild(deleteBtn);
                     //Populate userDiv
                     const userDiv = document.createElement("div");
                     userDiv.classList.add("col-md-5")
