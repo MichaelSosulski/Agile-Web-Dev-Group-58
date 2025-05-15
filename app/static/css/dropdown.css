@@ -56,3 +56,10 @@ textarea::placeholder {
     min-width: 150px;
     box-sizing: border-box;
 }
+
+.form-group > p > span{
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid red;
+    padding: 3px;
+}
