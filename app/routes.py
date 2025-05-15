@@ -240,11 +240,11 @@ def collection():
     planList = []
     favList = [] 
     for item in collections:
-        if item['category'] == 'Watched':
+        if item['category'] == 'Watched' or item['category'] == 'Favourite':
             watchList.append(item)
         elif item['category'] == 'Planning To Watch':
             planList.append(item)
-        elif item['category'] == 'Favourite':
+        if item['category'] == 'Favourite':
             favList.append(item)
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)

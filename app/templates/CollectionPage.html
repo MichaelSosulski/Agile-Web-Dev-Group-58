@@ -98,10 +98,10 @@
         </div>
         <h2>Favourites</h2>
         <div class="movie-catalog">
-            {% for (title, poster) in favList %}
+            {% for film in favList %}
             <div class="movie-card">
-                <p>{{title}}</p>
-                <img src={{poster}} alt="{{'poster image of ' + title}}">
+                <p>{{film.title}}</p>
+                <img src={{film.poster}} alt="{{'poster image of ' + film.title}}">
             </div>
             {% endfor %}
         </div>
