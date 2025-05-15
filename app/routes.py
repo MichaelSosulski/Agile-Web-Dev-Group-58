@@ -1,10 +1,10 @@
 from flask import request, redirect, url_for, render_template, flash
 from app import app, db
-from app.models import Movie, Collection, User, MovieGenre
+from app.models import Movie, Collection, User, MovieGenre, Friend
 from datetime import datetime
 from flask_login import current_user, login_user, login_required, logout_user
 import sqlalchemy as sa
-from app.forms import LoginForm, SignupForm, AddFilmForm
+from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm
 from flask import jsonify
 from sqlalchemy import func
 
@@ -75,35 +75,107 @@ def profile():
 @app.route('/Friends')
 @login_required
 def friends():
-    friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_2", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_3", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
+    send_request_form = SendRequestForm()
+    
+    # List of friends of user (is_friend = True)
+    friends = current_user.friends()
+    friend_ids = [friend.user_id for friend in current_user.friends()] # used for filtering
+    
+    # List of received and pending friend requests (is_friend = False)
+    pending_requests  = Friend.query.filter_by(friend_b_id=current_user.user_id, is_friend=False).all()   
+    pending_request_senders = [fr.friend_a for fr in pending_requests] # to show in pending request list 
+    pending_request_sender_ids = [user.user_id for user in pending_request_senders] # used for filtering
+    
+    # All users the current user can send a request to
+    # Cannot send friend request to current friends, sender of incoming pending requests, and self
+    excluded_ids = friend_ids + pending_request_sender_ids + [current_user.user_id]
+    users_to_request = User.query.filter(~User.user_id.in_(excluded_ids)).all()
+    
+    # Friend requests that the current user has sent and are still pending
+    outgoing_pending_requests = Friend.query.filter_by(friend_a_id=current_user.user_id, is_friend=False).all()
+    pending_recipient_ids = [fr.friend_b_id for fr in outgoing_pending_requests]
 
-    requests = [{"name":"Nico"}, {"name":"Thyler"}, {"name":"Michael"},{"name":"Tyson"}]
+    return render_template('FriendsPage.html',
+                            send_request_form=send_request_form,
+                            friends=friends,
+                            requests=pending_request_senders,
+                            users_to_request=users_to_request, 
+                            pending_recipient_ids=pending_recipient_ids)
 
-    return render_template('FriendsPage.html', friends=friends, requests=requests)
-
-@app.route('/Friends/request/send/<username>')
+@app.route('/Friends/request/send/<username>', methods=['POST'])
+@login_required
 def send_request(username):
-    #Create Friend database row between users
-    #Set is_friend to False
+    
+    form = SendRequestForm()
+    if form.validate_on_submit():
+        # Find the user to send request to
+        friend_b = User.query.filter_by(username=username).first_or_404()
+
+        # Check if a friend request or friendship already exists
+        existing = Friend.query.filter(
+            ((Friend.friend_a_id == current_user.user_id) & (Friend.friend_b_id == friend_b.user_id)) |
+            ((Friend.friend_a_id == friend_b.user_id) & (Friend.friend_b_id == current_user.user_id))
+        ).first()
+        
+        if not existing:
+            # Create a new friend request (is_friend = False)
+            friend_request = Friend(friend_a_id=current_user.user_id, friend_b_id=friend_b.user_id, is_friend=False)
+            db.session.add(friend_request)
+            db.session.commit()
+            flash(f"Friend request sent to {username}.")
+        else:
+            flash(f"A friend request or friendship already exists with {username}.")       
+    else:
+        flash("Invalid form submission.")
+        
     return redirect(url_for('friends'))
 
 @app.route('/Friends/request/accept/<username>')
+@login_required
 def accept_request(username):
-    #CHANGE is_friend field to True
+    # Find the user who sent the request
+    friend_a = User.query.filter_by(username=username).first_or_404()
+
+    # Find the friend request where current user is recipient
+    friend_request = Friend.query.filter_by(friend_a_id=friend_a.user_id, friend_b_id=current_user.user_id, is_friend=False).first()
+
+    if friend_request:
+        friend_request.is_friend = True
+        db.session.commit()
+
     return redirect(url_for('friends'))
 
 @app.route('/Friends/request/decline/<username>')
+@login_required
 def decline_request(username):
-    #Remove relationship from Friend table
+    # Find the user who sent the request
+    friend_a = User.query.filter_by(username=username).first_or_404()
+
+    # Find the friend request where current user is recipient
+    friend_request = Friend.query.filter_by(friend_a_id=friend_a.user_id, friend_b_id=current_user.user_id, is_friend=False).first()
+
+    if friend_request:
+        db.session.delete(friend_request)
+        db.session.commit()
+
     return redirect(url_for('friends'))
 
 @app.route('/Friends/request/remove/<username>')
+@login_required
 def remove_friend(username):
-    #Remove relationship from Friend table
+    # Find the friend user
+    friend = User.query.filter_by(username=username).first_or_404()
+
+    # Find the friendship (friendship could be in either direction)
+    friendship = Friend.query.filter(
+        ((Friend.friend_a_id == current_user.user_id) & (Friend.friend_b_id == friend.user_id)) |
+        ((Friend.friend_a_id == friend.user_id) & (Friend.friend_b_id == current_user.user_id))
+    ).filter_by(is_friend=True).first()
+
+    if friendship:
+        db.session.delete(friendship)
+        db.session.commit()
+
     return redirect(url_for('friends'))
 
 @app.route('/Stats')
@@ -154,13 +226,13 @@ def stats():
     director_freqs = [d[1] for d in director_counts]
 
     return render_template('StatsPage.html',
-                           genres=genres,
-                           genre_values=genre_values,
-                           watch_time=total_watch_time,
-                           watched_titles=watched_titles,
-                           watched_ratings=watched_ratings,
-                           director_names=director_names,
-                           director_freqs=director_freqs)
+                            genres=genres,
+                            genre_values=genre_values,
+                            watch_time=total_watch_time,
+                            watched_titles=watched_titles,
+                            watched_ratings=watched_ratings,
+                            director_names=director_names,
+                            director_freqs=director_freqs)
 
 
 @app.route('/add_film', methods=['POST'])
