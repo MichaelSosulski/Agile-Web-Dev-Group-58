@@ -52,15 +52,18 @@
                 <h3 class="pageTitle">Send Friend Request</h3>
                 <ul class="list-group">
                     {% for user in users_to_request %}
-                    <li class="list-group-item d-flex align-items-center">
-                        <div class="d-flex align-items-center"></div>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
                             <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
                                 alt="{{ user.username }} avatar" class="rounded-circle mr-3" width="40" height="40">
                             {{ user.username }}
                         </div>
-                        <div>
+                        <div class="ms-auto d-flex gap-1">
                             {% if user.user_id in pending_recipient_ids %}
-                                <button class="btn btn-secondary btn-sm" disabled>Request Sent</button>
+                            <form method="POST" action="{{ url_for('cancel_request', username=user.username) }}">
+                                {{ cancel_request_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-warning btn-sm">Cancel Request</button>
+                            </form>
                             {% else %}
                             <form method="POST" action="{{ url_for('send_request', username=user.username) }}">
                                 {{ send_request_form.hidden_tag() }}

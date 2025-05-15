@@ -50,3 +50,6 @@ class DeclineRequestForm(FlaskForm):
 
 class RemoveFriendForm(FlaskForm):
     submit = SubmitField('Remove Friend') 
+    
+class CancelRequestForm(FlaskForm):
+    submit = SubmitField('Cancel Request')

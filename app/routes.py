@@ -4,7 +4,7 @@ from app.models import Movie, Collection, User, MovieGenre, Friend
 from datetime import datetime
 from flask_login import current_user, login_user, login_required, logout_user
 import sqlalchemy as sa
-from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm
+from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm, CancelRequestForm
 from flask import jsonify
 from sqlalchemy import func
 
@@ -76,6 +76,7 @@ def profile():
 @login_required
 def friends():
     send_request_form = SendRequestForm()
+    cancel_request_form = CancelRequestForm()
     
     # List of friends of user (is_friend = True)
     friends = current_user.friends()
@@ -97,6 +98,7 @@ def friends():
 
     return render_template('FriendsPage.html',
                             send_request_form=send_request_form,
+                            cancel_request_form=cancel_request_form,
                             friends=friends,
                             requests=pending_request_senders,
                             users_to_request=users_to_request, 
@@ -128,6 +130,24 @@ def send_request(username):
     else:
         flash("Invalid form submission.")
         
+    return redirect(url_for('friends'))
+
+@app.route('/Friends/request/cancel/<username>', methods=['POST'])
+@login_required
+def cancel_request(username):
+    user_to_cancel = User.query.filter_by(username=username).first_or_404()
+    
+    # Delete the friend request where current user is sender
+    friend_request = Friend.query.filter_by(
+        friend_a_id=current_user.user_id,
+        friend_b_id=user_to_cancel.user_id,
+        is_friend=False
+    ).first()
+
+    if friend_request:
+        db.session.delete(friend_request)
+        db.session.commit()
+
     return redirect(url_for('friends'))
 
 @app.route('/Friends/request/accept/<username>')
