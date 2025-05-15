@@ -14,6 +14,14 @@
     z-index: 1;
 }
 
+.dropdown-content {
+    display: none; 
+}
+
+.dropdown-content.open {
+    display: block; 
+}
+
 .drop-right {
     right: 3%;
 }
@@ -22,10 +30,36 @@
     left: 3%;
 }
 
-#loginDropdown {
+.dropdown-login {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    min-width: 300px;
+    padding: 20px;
+    background-color: #2C354A;
+    color: #ffffff;
+    overflow: auto;
+    z-index: 1;
+
     display: none;
 }
 
-#signupDropdown {
-    display: none;
+input::placeholder,
+textarea::placeholder {
+    color: #aaaaaa; /* Light gray, or use any color you prefer */
+    opacity: 1; /* Ensures full opacity, especially in Firefox */
+}
+
+.form-control {
+    padding: 0.75rem 1rem; /* Adjust padding for spacing inside the input boxes */
+    width: 100%;
+    min-width: 150px;
+    box-sizing: border-box;
+}
+
+.form-group > p > span{
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid red;
+    padding: 3px;
 }

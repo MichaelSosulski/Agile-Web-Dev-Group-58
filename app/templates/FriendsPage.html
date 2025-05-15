@@ -7,7 +7,7 @@
     {% endblock %}
 
     {% block content %}
-    <h1 class="pageTitle">My Friends</h1>
+    <h1 class="pageHeading">Friends List</h1>
     <ul>
         {% for friend in friends %}
         <li><img src={{friend.image}} alt="{{friend.username}} Picture" style="width:20px; height:20px; vertical-align:middle; margin-right:8px;">{{friend.username}}</li>
