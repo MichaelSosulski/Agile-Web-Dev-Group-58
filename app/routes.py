@@ -207,6 +207,22 @@ def add_film():
 
     return redirect(url_for('collection'))
 
+@app.route('/fav_film', methods=['POST'])
+@login_required
+def fav_film():
+    user_id = current_user.user_id
+    if request.method == 'POST':
+        id = request.form['id']
+        film = Collection.query.join(Movie).filter(user_id == user_id,
+            Movie.movie_id == id, Collection.category == 'Watched').one_or_none()
+        if film != None:
+            film.category = 'Favourite'
+            db.session.add(film)
+            db.session.commit()
+        else:
+            flash("film is not in Watched List")
+    return redirect(url_for('collection'))
+
 @app.route('/get_film/<query>')
 @login_required
 def get_film(query):
