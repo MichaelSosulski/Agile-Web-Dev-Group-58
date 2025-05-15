@@ -231,7 +231,12 @@ def get_movie_collection(user_id, search=None):
     Retrieves movie collection data for a given user, including movie details and genres.
     """
     if search:
-        collections = Collection.query.join(Movie).filter(Collection.user_id == user_id, Movie.title == search)
+        search_without_spaces_lower = search.replace(' ', '').lower()
+
+        collections = Collection.query.join(Movie).filter(
+        Collection.user_id == user_id,
+        func.lower(func.replace(Movie.title, ' ', '')) == search_without_spaces_lower
+        )
     else:
         collections = Collection.query.join(Movie).filter(Collection.user_id == user_id)
 
