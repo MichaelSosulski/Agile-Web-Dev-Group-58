@@ -27,7 +27,7 @@ def welcome():
                 login_user(user)
                 flash('Logged in successfully', 'success')
                 return redirect('/Homepage')
-              
+                
     elif 'submit_signup' in request.form:
         show = 'signup'
         if sForm.validate_on_submit():
@@ -334,8 +334,8 @@ def add_film():
         )
         db.session.add(collection_entry)
         db.session.commit()
-
-    return redirect(url_for('collection'))
+    
+    return render_collection_page(add_form, show='add')
 
 @app.route('/fav_film', methods=['POST'])
 @login_required
@@ -361,12 +361,12 @@ def rm_film():
     if request.method == 'POST':
         id = request.form['id']
         film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
-           Movie.movie_id == id).one_or_none()
+            Movie.movie_id == id).one_or_none()
         if film != None:
             db.session.delete(film)
             db.session.commit()
         else:
-           flash("Can't delete non-existent collection item.")
+            flash("Can't delete non-existent collection item.")
     return redirect(url_for('collection'))
 
 @app.route('/get_film/<query>')
@@ -375,11 +375,7 @@ def get_film(query):
     films = get_movie_collection(current_user.user_id, search=query)
     return films
 
-@app.route('/Collection')
-@login_required
-def collection():
-    add_film_form = AddFilmForm()
-    
+def render_collection_page(add_form, show=None):
     user_id = current_user.user_id
     collections = get_movie_collection(user_id)
     watchList = []
@@ -393,7 +389,13 @@ def collection():
         if item['category'] == 'Favourite':
             favList.append(item)
 
-    return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
+    return render_template('CollectionPage.html', add_form=add_form, watchList=watchList, favList=favList, planList=planList, show=show)
+
+@app.route('/Collection')
+@login_required
+def collection():
+    add_film_form = AddFilmForm()
+    return render_collection_page(add_film_form)
 
 @app.route('/logout')
 def logout():

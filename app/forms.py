@@ -68,7 +68,6 @@ class AddFilmForm(FlaskForm):
         if form.category.data == "Planning To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
 
-
 # Friend management forms
 class SendRequestForm(FlaskForm):
     submit = SubmitField('Send Request')

@@ -28,21 +28,21 @@
                         {{ add_form.film_title.label }}<br>
                         {{ add_form.film_title }}
                         {% for error in add_form.film_title.errors %}
-                        <span>[{{ error }}]</span>
+                        <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
                     <p>
                         {{ add_form.release_year.label }}<br>
                         {{ add_form.release_year }}
                         {% for error in add_form.release_year.errors %}
-                        <span>[{{ error }}]</span>
+                        <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
                     <p>
                         {{ add_form.watch_date.label }}<br>
                         {{ add_form.watch_date }}
                         {% for error in add_form.watch_date.errors %}
-                        <span>[{{ error }}]</span>
+                        <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
                     <p>
@@ -54,21 +54,21 @@
                             <span>
                             {% endfor %}
                         {% for error in add_form.user_rating.errors %}
-                        <span>[{{ error }}]</span>
+                        <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
                     <p>
                         {{ add_form.user_review.label }}
                         {{ add_form.user_review }}
                         {% for error in add_form.user_review.errors %}
-                        <span>[{{ error }}]</span>
+                        <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
                     <p>
                         {{ add_form.category.label }}
                         {{ add_form.category }}
                         {% for error in add_form.category.errors %}
-                        <span>[{{ error }}]</span>
+                        <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
                     <p> {{ add_form.submit_film() }}</p>
