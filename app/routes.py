@@ -216,7 +216,7 @@ def remove_friend(username):
 @app.route('/Stats')
 @login_required
 def stats():
-    user_id = 1
+    user_id = current_user.user_id
 
     # Top genres
     genre_counts = (
@@ -293,24 +293,36 @@ def add_film():
 
         user_id = current_user.user_id
 
-        new_movie = Movie(
-            title = title,
-            release_year = int(release_year) if release_year else None,
-            director = director,
-            run_time = run_time,
-            plot = plot,
-            poster = poster_url
-        )
-        db.session.add(new_movie)
-        db.session.commit()
+        #Check if collection row is already in Collection
+        in_collection = Collection.query.join(Movie).filter(Collection.user_id == user_id,
+            Movie.title == title, Movie.release_year == release_year).one_or_none()
+        if in_collection != None:
+            flash("This film is already in your collection.")
+            return redirect(url_for('collection'))
 
-        for g in genres:
-            film_to_genre = MovieGenre(
-                movie_id = new_movie.movie_id,
-                genre = g
+        #Check if movie is already in db, if it is not, add it
+        find_film = Movie.query.filter(Movie.title==title, Movie.release_year==release_year).one_or_none()
+        if find_film is None:
+            new_movie = Movie(
+                title = title,
+                release_year = int(release_year) if release_year else None,
+                director = director,
+                run_time = run_time,
+                plot = plot,
+                poster = poster_url
             )
-            db.session.add(film_to_genre)
+            db.session.add(new_movie)
             db.session.commit()
+
+            for g in genres:
+                film_to_genre = MovieGenre(
+                    movie_id = new_movie.movie_id,
+                    genre = g
+                )
+                db.session.add(film_to_genre)
+                db.session.commit()
+        else:
+            new_movie = find_film
 
         collection_entry = Collection(
             user_id=user_id,
@@ -325,17 +337,61 @@ def add_film():
 
     return redirect(url_for('collection'))
 
+@app.route('/fav_film', methods=['POST'])
+@login_required
+def fav_film():
+    user_id = current_user.user_id
+    if request.method == 'POST':
+        id = request.form['id']
+        film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
+            Movie.movie_id == id, Collection.category == 'Watched').one_or_none()
+        if film != None:
+            film.category = 'Favourite'
+            db.session.add(film)
+            db.session.commit()
+        else:
+            flash("film is not in Watched List")
+    return redirect(url_for('collection'))
+
+@app.route('/rm_film', methods=['POST'])
+@login_required
+def rm_film():
+    user_id = current_user.user_id
+    print(user_id)
+    if request.method == 'POST':
+        id = request.form['id']
+        film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
+           Movie.movie_id == id).one_or_none()
+        if film != None:
+            db.session.delete(film)
+            db.session.commit()
+        else:
+           flash("Can't delete non-existent collection item.")
+    return redirect(url_for('collection'))
+
+@app.route('/get_film/<query>')
+@login_required
+def get_film(query):
+    films = get_movie_collection(current_user.user_id, search=query)
+    return films
+
 @app.route('/Collection')
 @login_required
 def collection():
     add_film_form = AddFilmForm()
     
     user_id = current_user.user_id
-    collections = Collection.query.filter_by(user_id=user_id).all()
-
-    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
-    planList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Planning To Watch']
+    collections = get_movie_collection(user_id)
+    watchList = []
+    planList = []
     favList = [] 
+    for item in collections:
+        if item['category'] == 'Watched' or item['category'] == 'Favourite':
+            watchList.append(item)
+        elif item['category'] == 'Planning To Watch':
+            planList.append(item)
+        if item['category'] == 'Favourite':
+            favList.append(item)
 
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
@@ -343,3 +399,40 @@ def collection():
 def logout():
     logout_user()
     return redirect(url_for('welcome'))
+
+def get_movie_collection(user_id, search=None):
+    """
+    Retrieves movie collection data for a given user, including movie details and genres.
+    """
+    if search:
+        search_without_spaces_lower = search.replace(' ', '').lower()
+
+        collections = Collection.query.join(Movie).filter(
+        Collection.user_id == user_id,
+        func.lower(func.replace(Movie.title, ' ', '')) == search_without_spaces_lower
+        )
+    else:
+        collections = Collection.query.join(Movie).filter(Collection.user_id == user_id)
+
+    # Process the results into a list of dictionaries
+    results = []
+    if collections != None:
+        for collection in collections:
+            movie = collection.movie
+            genres = [mg.genre for mg in movie.movie_genres]
+            results.append({
+                'movie_id': movie.movie_id,
+                'title': movie.title,
+                'poster': movie.poster,
+                'release_year': movie.release_year,
+                'plot': movie.plot,
+                'director': movie.director,
+                'run_time': movie.run_time,
+                'watch_date': collection.watch_date,
+                'rating': collection.rating,
+                'review': collection.review,
+                'genres': ", ".join(genres),  # String of genres
+                'category': collection.category,
+            })
+        return results
+    return None

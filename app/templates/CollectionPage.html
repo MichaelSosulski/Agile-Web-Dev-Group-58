@@ -12,12 +12,14 @@
     <h1 class="pageHeading">Collections</h1>
     
     <div class="container">
-        <form action="/action_page.php">
-            <input type="text" placeholder="Find film in collection" name="search">
-        </form>
+        <input id="searchFilm" class="form-control glyphicon glyphicon-search" type="text" placeholder="Find film in collection &#xe003">
+        <br>
+        <div id="filmData" class="row">
+            <!--Filled with client side script getCollectionQuery.js-->
+        </div>
         <br>
         <div class="dropdown">
-            <button id="addBtn" type="button">Add new film</button>
+            <button id="addBtn" class="btn btn-secondary" type="button">Add new film</button>
             <div id="addDropdown" class="dropdown-content drop-left">
                 <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
                     <!--includes the csrf token and hidden film data fields-->
@@ -78,28 +80,28 @@
     <section class="container">
         <h2 class="sectionHeading">Watched</h2>
         <div class="movie-catalog">
-            {% for (title, poster) in watchList %}
+            {% for film in watchList %}
             <div class="movie-card">
-                <p>{{title}}</p>
-                <img src={{poster}} alt="{{'poster image of ' + title}}">
+                <p>{{film.title}}</p>
+                <img src={{film.poster}} alt="{{'poster image of ' + film.title}}">
             </div>
             {% endfor %}
         </div>
         <h2 class="sectionHeading">To Watch</h2>
         <div class="movie-catalog">
-            {% for (title, poster) in planList %}
+            {% for film in planList %}
             <div class="movie-card">
-                <p>{{title}}</p>
-                <img src={{poster}} alt="{{'poster image of ' + title}}">
+                <p>{{film.title}}</p>
+                <img src={{film.poster}} alt="{{'poster image of ' + film.title}}">
             </div>
             {% endfor %}
         </div>
         <h2 class="sectionHeading">Favourites</h2>
         <div class="movie-catalog">
-            {% for (title, poster) in favList %}
+            {% for film in favList %}
             <div class="movie-card">
-                <p>{{title}}</p>
-                <img src={{poster}} alt="{{'poster image of ' + title}}">
+                <p>{{film.title}}</p>
+                <img src={{film.poster}} alt="{{'poster image of ' + film.title}}">
             </div>
             {% endfor %}
         </div>
@@ -108,4 +110,5 @@
         <script src="{{ url_for('static', filename='js/addFilmDropdown.js') }}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/filmRequest.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/getCollectionQuery.js') }}"></script>
         {% endblock %}
