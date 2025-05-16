@@ -39,6 +39,13 @@
                         {% endfor %}
                     </p>
                     <p>
+                        {{ add_form.category.label }}
+                        {{ add_form.category }}
+                        {% for error in add_form.category.errors %}
+                        <span style="color: #d9534f;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
                         {{ add_form.watch_date.label }}<br>
                         {{ add_form.watch_date }}
                         {% for error in add_form.watch_date.errors %}
@@ -61,13 +68,6 @@
                         {{ add_form.user_review.label }}
                         {{ add_form.user_review }}
                         {% for error in add_form.user_review.errors %}
-                        <span style="color: #d9534f;">[{{ error }}]</span>
-                        {% endfor %}
-                    </p>
-                    <p>
-                        {{ add_form.category.label }}
-                        {{ add_form.category }}
-                        {% for error in add_form.category.errors %}
                         <span style="color: #d9534f;">[{{ error }}]</span>
                         {% endfor %}
                     </p>
