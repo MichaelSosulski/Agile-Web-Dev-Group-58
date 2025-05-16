@@ -334,6 +334,7 @@ def add_film():
         )
         db.session.add(collection_entry)
         db.session.commit()
+        return redirect(url_for('collection'))
     
     return render_collection_page(add_form, show='add')
 
