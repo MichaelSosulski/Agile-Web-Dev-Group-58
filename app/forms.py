@@ -34,10 +34,9 @@ class SignupForm(FlaskForm):
             raise ValidationError('Please use a different username')
 
 class AddFilmForm(FlaskForm):
-    
-    film_title = StringField("Film Title", validators=[DataRequired(), Length(max=50)])
+    film_title = StringField("Film Title", validators=[DataRequired(), Length(max=100)])
     release_year = IntegerField("Release Year", validators=[NumberRange(min=1910, max=datetime.datetime.now().year)])
-    watch_date = DateField("Watch Date")
+    watch_date = DateField("Watch Date", validators=[Optional()])
     user_rating = RadioField("Rating", choices=[1,2,3,4,5], validators=[Optional()])
     user_review = TextAreaField("Review", validators=[Length(max=300)])
     category = RadioField("Category", choices=["Watched", "To Watch"], validators=[DataRequired()])
@@ -51,6 +50,7 @@ class AddFilmForm(FlaskForm):
 
     submit_film = SubmitField("Add Film")
     
+    #check watch_date field
     def validate_watch_date(form, field):
         if form.category.data == "To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
@@ -60,12 +60,14 @@ class AddFilmForm(FlaskForm):
         elif form.category.data == "Watched" and not field.data:
             raise ValidationError("Error: Please Select a date.")
 
+    #check user_rating
     def validate_user_rating(form, field):
         if form.category.data == "To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
         if form.category.data == "Watched" and not field.data:
             raise ValidationError("Error: Please input a rating")
 
+    #check user_review
     def validate_user_review(form, field):
         if form.category.data == "To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
