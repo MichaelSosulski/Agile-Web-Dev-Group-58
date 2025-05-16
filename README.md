@@ -1,6 +1,20 @@
 # FilmGraph 
 CITS3403 Agile Web Development: Group 58
 
+## Features
+FilmGraph is designed to be a movie archiving website that collects user information relating to a film
+and attaches the input to information about the film. The user can browse their growing collection of films,
+search for a particular film in the collection to view more details, favourite it or remove it.
+Graphs and statistics can be viewed, associated with the data from a user's collection. They are also able to connect with other users through the friends system and share their graphs with others.
+
+## Contributors
+| Student ID | Student Name | GitHub Account |
+|------------|--------------|----------------|
+|Nico Buchanan|22924258|nicostellar|
+|Michael Sosulski|23385553|MichaelSosulski|
+|Tyson Haines|23779585|TysonHaines|
+|Thyler Cung|23743032|thylercung|
+
 ## Instructions: How to launch the application 
 
 ### Set up the virtual environment
