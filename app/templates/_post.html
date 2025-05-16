@@ -13,17 +13,26 @@
 		</td>
 		<td>
 			{% if post.author == current_user %}
-                You said to 
+                {% if '<' ~ 'img' in post.body %}
+                    You sent a chart to 
+                {% else %}
+                    You said to 
+                {% endif %}
                 <a class="user_popup" href="{{ url_for('user', username=post.recipient.username) }}">
                     {{ post.recipient.username }}
                 </a>
             {% else %}
                 <a class="user_popup" href="{{ url_for('user', username=post.author.username) }}">
                     {{ post.author.username }}
-                </a> said to you
+                </a> 
+                {% if '<' ~ 'img' in post.body %}
+                    sent you a chart
+                {% else %}
+                    said to you 
+                {% endif %}
             {% endif %}
 			<br>
-			<span id="post{{ post.id }}">{{ post.body }}</span>
+			<span id="post{{ post.id }}">{{ post.body|safe }}</span>
 		</td>
 	</tr>
 </table>
