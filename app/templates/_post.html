@@ -2,12 +2,12 @@
 	<tr>
 		<td width="70px">
 			{% if post.author == current_user %}
-                <a href="{{ url_for('user', username=post.recipient.username) }}">
-                    <img src="{{ post.recipient.avatar or url_for('static', filename='images/placeholder.jpg') }}" />
+                <a href="{{ url_for('main.user', username=post.recipient.username) }}">
+                    <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" style="width:32px; height:32px;"/>
                 </a>
             {% else %}
                 <a href="{{ url_for('main.user', username=post.author.username) }}">
-                    <img src="{{ post.author.avatar or url_for('static', filename='images/placeholder.jpg') }}" />
+                    <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" style="width:32px; height:32px;"/>
                 </a>
             {% endif %}
 		</td>

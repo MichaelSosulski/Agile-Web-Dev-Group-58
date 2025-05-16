@@ -94,6 +94,10 @@
     <section class="container">
         <h2 class="sectionHeading">Watched</h2>
         <div class="movie-catalog">
+            {% if watchList|length == 0 %}
+                <p>No films here yet.</p>
+            {% endif %}
+
             {% for film in watchList %}
             <div class="movie-card">
                 <p>{{film.title}}</p>
@@ -103,6 +107,10 @@
         </div>
         <h2 class="sectionHeading">To Watch</h2>
         <div class="movie-catalog">
+            {% if planList|length == 0 %}
+                <p>No films here yet.</p>
+            {% endif %}
+
             {% for film in planList %}
             <div class="movie-card">
                 <p>{{film.title}}</p>
@@ -112,6 +120,10 @@
         </div>
         <h2 class="sectionHeading">Favourites</h2>
         <div class="movie-catalog">
+            {% if favList|length == 0 %}
+                <p>No films here yet.</p>
+            {% endif %}
+
             {% for film in favList %}
             <div class="movie-card">
                 <p>{{film.title}}</p>
