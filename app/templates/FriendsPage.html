@@ -37,18 +37,16 @@
                 <h3 class="sectionHeading" style="text-align: center;">Friend List</h3>
                 <ul class="list-group">
                     {% for friend in friends %}
-                    <li class="list-group-item d-flex align-items-center">
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
                     <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
                         alt="{{ friend.username }} avatar" class="rounded-circle mr-3" width="40" height="40">
                     {{ friend.username }}
-                    <a href="{{ url_for('remove_friend', username=friend.username) }}" 
-                        class="btn btn-sm btn-outline-danger ms-auto">
-                        Remove Friend
-                    </a>
-                    <a href="{{ url_for('send_message', recipient=friend.username) }}" 
-                        class="btn btn-sm btn-outline-primary ms-auto me-2">
-                        Send Message
-                    </a>
+                    <form action="{{ url_for('remove_friend', username=friend.username) }}" method="get" style="display: inline;">
+                        <button type="submit" class="btn btn-sm btn-danger ms-auto">Remove Friend</button>
+                    </form>
+                    <form action="{{ url_for('send_message', recipient=friend.username) }}" method="get" style="display: inline;">
+                        <button type="submit" class="btn btn-sm btn-outline-primary me-2">Send Message</button>
+                    </form>
                     </li>
                     {% endfor %}
                 </ul>

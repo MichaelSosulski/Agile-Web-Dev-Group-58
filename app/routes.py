@@ -90,7 +90,6 @@ def profile():
             
     friends = user.friends()
 
-    
     return render_template(
         'ProfilePage.html',
         user=user,
