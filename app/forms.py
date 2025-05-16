@@ -35,12 +35,12 @@ class SignupForm(FlaskForm):
 
 class AddFilmForm(FlaskForm):
     
-    film_title = StringField("Film Title:", validators=[DataRequired(), Length(max=50)])
-    release_year = IntegerField("Release Year (optional):", validators=[NumberRange(min=1910, max=datetime.datetime.now().year)])
-    watch_date = DateField("Watch Date (if you've seen it):")
-    user_rating = RadioField("Rating:", choices=[1,2,3,4,5], validators=[Optional()])
-    user_review = TextAreaField("How was it?", validators=[Length(max=300)])
-    category = RadioField("Category:", choices=["Watched", "Planning To Watch"], validators=[DataRequired()])
+    film_title = StringField("Film Title", validators=[DataRequired(), Length(max=50)])
+    release_year = IntegerField("Release Year", validators=[NumberRange(min=1910, max=datetime.datetime.now().year)])
+    watch_date = DateField("Watch Date")
+    user_rating = RadioField("Rating", choices=[1,2,3,4,5], validators=[Optional()])
+    user_review = TextAreaField("Review", validators=[Length(max=300)])
+    category = RadioField("Category", choices=["Watched", "To Watch"], validators=[DataRequired()])
 
     #hidden film data
     director = HiddenField()
@@ -49,7 +49,7 @@ class AddFilmForm(FlaskForm):
     plot = HiddenField()
     poster_url = HiddenField()
 
-    submit_film = SubmitField("Add film")
+    submit_film = SubmitField("Add Film")
     
     def validate_watch_date(form, field):
         if form.category.data == "Planning To Watch" and field.data:
