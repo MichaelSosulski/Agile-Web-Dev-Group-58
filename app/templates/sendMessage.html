@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/addFilmDropdown.css') }}">  
+<title>FilmGraph Messages</title>
+{% endblock %}
+
+{% block content %}
+	<h1>{{ _('Send Message to %(recipient)s', recipient=recipient) }}</h1>
+	<form method="POST">
+		{{ form.hidden_tag() }}
+		<div class="form-group">
+			{{ form.message.label(class="form-label") }}
+			{{ form.message(class="form-control", rows=5) }}
+		</div>
+		<div class="form-group mt-3">
+			{{ form.submit(class="btn btn-primary") }}
+		</div>
+	</form>
+{% endblock %}
