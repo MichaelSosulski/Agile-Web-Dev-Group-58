@@ -7,10 +7,82 @@
     {% endblock %}
 
     {% block content %}
-    <h1 class="pageTitle">My Friends</h1>
-    <ul>
-        {% for friend in friends %}
-        <li><img src={{friend.image}} alt="{{friend.username}} Picture" style="width:20px; height:20px; vertical-align:middle; margin-right:8px;">{{friend.username}}</li>
-        {% endfor %}
-    </ul>
+    <h1 class="pageHeading">Friends</h1>
+    
+    <div class="container my-4">
+        <div class="row">
+            
+            <!-- Friend Requests -->
+            <div class="col-md-4 mb-4">
+                <h3 class="sectionHeading" style="text-align: center;">Friend Requests</h3>
+                <ul class="list-group">
+                    {% for user in requests %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
+                                class="rounded-circle mr-2" width="30" height="30">
+                            {{ user.username }}
+                        </div>
+                        <div>
+                            <a href="{{ url_for('accept_request', username=user.username) }}" class="btn btn-sm btn-success me-1">Accept</a>
+                            <a href="{{ url_for('decline_request', username=user.username) }}" class="btn btn-sm btn-danger">Decline</a>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Friend List -->
+            <div class="col-md-4 mb-4">
+                <h3 class="sectionHeading" style="text-align: center;">Friend List</h3>
+                <ul class="list-group">
+                    {% for friend in friends %}
+                    <li class="list-group-item d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
+                        alt="{{ friend.username }} avatar" class="rounded-circle mr-3" width="40" height="40">
+                    {{ friend.username }}
+                    <a href="{{ url_for('remove_friend', username=friend.username) }}" 
+                        class="btn btn-sm btn-outline-danger ms-auto">
+                        Remove Friend
+                    </a>
+                    <a href="{{ url_for('send_message', recipient=friend.username) }}" 
+                        class="btn btn-sm btn-outline-primary ms-auto me-2">
+                        Send Message
+                    </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Suggested Friends -->
+            <div class="col-md-4 mb-4">
+                <h3 class="sectionHeading" style="text-align: center;">Send Friend Request</h3>
+                <ul class="list-group">
+                    {% for user in users_to_request %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
+                                alt="{{ user.username }} avatar" class="rounded-circle mr-3" width="40" height="40">
+                            {{ user.username }}
+                        </div>
+                        <div class="ms-auto d-flex gap-1">
+                            {% if user.user_id in pending_recipient_ids %}
+                            <form method="POST" action="{{ url_for('cancel_request', username=user.username) }}">
+                                {{ cancel_request_form.hidden_tag() }}
+                                <button type="submit" class="btn btn-warning btn-sm">Cancel Request</button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('send_request', username=user.username) }}">
+                                {{ send_request_form.hidden_tag() }}
+                                {{ send_request_form.submit(class="btn btn-primary btn-sm") }}
+                            </form>
+                            {% endif %}
+                        </div> 
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </div>
     {% endblock %}

@@ -1,10 +1,25 @@
 /*Style elements within the page*/
+body {
+    background-color: #F0F0F0;
+}
 
 /*Keeps the page titles uniform*/
-.pageTitle {
+.pageHeading {
     font-weight: bold; 
-    text-decoration: underline;
     text-align: center;
+    color: #333333; 
+    font-size: clamp(40px, 5vw, 56px);
+    font-family: Helvetica, sans-serif;
+    padding: 50px;
+    margin: 0;
+}
+
+/*Keeps the page titles uniform*/
+.sectionHeading {
+    font-weight: bold; 
+    color: #333333; 
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-family: Helvetica, sans-serif;
 }
 
 /*For altering the unordered list element in a dropdown*/
@@ -15,4 +30,15 @@
 /*Set a min width for the addFilm dropdown*/
 #addDropdown {
     min-width: 300px;
+}
+
+/*Set Styling for the film search result*/
+#filmData {
+    background-color: #1C2331;
+    color: white;
+    border-radius: 5px;
+}
+
+#filmData img {
+    max-width: 100%;
 }

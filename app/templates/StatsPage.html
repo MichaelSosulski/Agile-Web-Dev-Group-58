@@ -6,20 +6,43 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
 
 <title>FilmGraph Stats Page</title>
+<meta name="csrf-token" content="{{ csrf_token() }}"> 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script src="{{ url_for('static', filename='js/stats.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-<h1 class="pageTitle">Movie Analytics</h1>
+<h1 class="pageHeading">Movie Analytics</h1>
 <div class="feature-preview container">
     <div class="row">
         <div class="col-md-6">
-            <h3>Top Genres</h3>    
+            <h3>Top Genres</h3>
+
+            <label for="recipientSelect">Select Friend:</label>
+            <select id="recipientSelect" name="recipientSelect" class="form-select mb-2">
+            {% for friend in friends %}
+                <option value="{{ friend.user_id }}">{{ friend.username }}</option>
+            {% else %}
+                <option disabled>No friends found</option>
+            {% endfor %}
+            </select>    
+            <button class="btn btn-sm btn-primary mb-2" id="sendChart">Send Chart</button>
+
             <div id="genreChart"></div>
         </div>
         <div class="col-md-6">
-            <h3>Watch Time</h3>    
+            <h3>Watch Time</h3>   
+
+            <label for="recipientSelect">Select Friend:</label>
+            <select id="recipientSelect" name="recipientSelect" class="form-select mb-2">
+            {% for friend in friends %}
+                <option value="{{ friend.user_id }}">{{ friend.username }}</option>
+            {% else %}
+                <option disabled>No friends found</option>
+            {% endfor %}
+            </select>    
+            <button class="btn btn-sm btn-primary mb-2" id="sendChart">Send Chart</button>
+
             <div id="watchTimeChart"></div>
         </div>
     </div>
@@ -27,6 +50,17 @@
     <div class="row mt-4">
         <div class="col-md-12">
             <h3>Your Watched Films</h3>
+            
+            <label for="recipientSelect">Select Friend:</label>
+            <select id="recipientSelect" name="recipientSelect" class="form-select mb-2">
+            {% for friend in friends %}
+                <option value="{{ friend.user_id }}">{{ friend.username }}</option>
+            {% else %}
+                <option disabled>No friends found</option>
+            {% endfor %}
+            </select>    
+            <button class="btn btn-sm btn-primary mb-2" id="sendChart">Send Chart</button>
+
             <div id="watchedFilmsChart"></div>
         </div>
     </div>
@@ -34,17 +68,28 @@
     <div class="row mt-4">
         <div class="col-md-12">
             <h3>Favourite Directors</h3>
+
+            <label for="recipientSelect">Select Friend:</label>
+            <select id="recipientSelect" name="recipientSelect" class="form-select mb-2">
+            {% for friend in friends %}
+                <option value="{{ friend.user_id }}">{{ friend.username }}</option>
+            {% else %}
+                <option disabled>No friends found</option>
+            {% endfor %}
+            </select>    
+            <button class="btn btn-sm btn-primary mb-2" id="sendChart">Send Chart</button>
+
             <div id="directorChart"></div>
         </div>
     </div>
 </div>
 <script>
-    const chartGenres = {{ genres | tojson }};
-    const chartGenreValues = {{ genre_values | tojson }};
-    const chartWatchTime = {{ watch_time | tojson }};
-    const watchedTitles = {{ watched_titles | tojson }};
-    const watchedRatings = {{ watched_ratings | tojson }};
-    const directorNames = {{ director_names | tojson }};
-    const directorFreqs = {{ director_freqs | tojson }};
+    const chartGenres = {{ genres | tojson | safe }};
+    const chartGenreValues = {{ genre_values | tojson | safe }};
+    const chartWatchTime = {{ watch_time | tojson | safe }};
+    const watchedTitles = {{ watched_titles | tojson | safe }};
+    const watchedRatings = {{ watched_ratings | tojson | safe }};
+    const directorNames = {{ director_names | tojson | safe }};
+    const directorFreqs = {{ director_freqs | tojson | safe }};
 </script>
 {% endblock %}

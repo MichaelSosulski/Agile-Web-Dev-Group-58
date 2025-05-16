@@ -14,10 +14,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/container.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
+<<<<<<< HEAD
 </head>
 <body>
 
     <!-- Navbar -->
+=======
+
+
+    <title>FilmGraph Welcome Page</title>
+
+</head> 
+<body data-show-dropdown="{{ show }}">
+>>>>>>> main
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -27,6 +36,7 @@
                 <li><a href="{{ url_for('home') }}">Home</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+<<<<<<< HEAD
                 <li class="dropdown"><a id="loginBtn" href="#">Login <span class="caret"></span></a>
                     <div id="loginDropdown" class="dropdown-content drop-right">       
                         <div id="loginForm" class="form-container">
@@ -86,7 +96,61 @@
                         </div>
                     </div>
                 </li>
+=======
+                <li class="dropdown"><a id="loginBtn" href="#">Login <span class="caret"></span></a></li>
+                <li class="dropdown"><a id="signupBtn" href="#">Sign Up <span class="caret"></span></a></li>
+>>>>>>> main
             </ul>
+            <div id="loginDropdown" class="dropdown-login">       
+                <div id="loginForm" class="form-container">
+                    <form name="login" action="" method="post">
+                        <div class="form-group">
+                            {{ lForm.hidden_tag() }}
+                            <p>
+                                {{ lForm.username(class_="form-control", size=20, placeholder="Username") }}
+                                {% for error in login_errors.username %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p>
+                                {{ lForm.password(class_="form-control", size=20, placeholder="Password") }}
+                                {% for error in login_errors.password %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p> {{ lForm.submit_login(class="btn btn-primary form-control") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="signupDropdown" class="dropdown-login">       
+                <div id="signupForm" class="form-container">
+                    <form name="signup" action="" method="post">
+                        <div class="form-group">
+                            {{ sForm.hidden_tag() }}
+                            <p>
+                                {{ sForm.username(class_="form-control", size=20, placeholder="Username")}}
+                                {% for error in sForm.username.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p>
+                                {{ sForm.password(class_="form-control", size=20, placeholder="Password")}}
+                                {% for error in sForm.password.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p>
+                                {{ sForm.confirmPassword(class_="form-control", size=20, placeholder="Confirm Password") }}
+                                {% for error in sForm.confirmPassword.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p> {{ sForm.submit_signup(class="btn btn-primary form-control") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -112,36 +176,43 @@
         <div class="row">
             <div class="col-md-6">
                 <h1>Insightful Stats</h1>    
-                <p>Description of feature.</p>
+                <p><b>Wanna know what your movie favourites are?
+                    Track your genre diversity, directors and more!</b></p>
             </div>
             <div class="col-md-6">
-                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+                <img src="{{ url_for('static', filename='images/stats.png') }}" alt="Films" class="img-fluid">
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+                <img src="{{ url_for('static', filename='images/collection.png') }}" alt="Films" class="img-fluid">
             </div>
             <div class="col-md-6">
                 <h1>Create Collections</h1>    
-                <p>Description of feature.</p>
+                <p><b>Store your movie life and favourites all in one place.
+                    Add plans to watch something new!</b></p>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
                 <h1>Watch with Friends</h1>    
-                <p>Description of feature.</p>
+                <p><b>Join in on the fun and share your stats with other movie lovers!.</b></p>
             </div>
             <div class="col-md-6">
-                <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
+                <img src="{{ url_for('static', filename='images/friends.png') }}" alt="Films" class="img-fluid">
             </div>
         </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Include JavaScript at the end -->
     <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+=======
+    <script src="{{ url_for('static', filename='js/toggleDropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loginDropdown.js') }}"></script>
+>>>>>>> main
 
 </body>
 </html>
