@@ -93,10 +93,9 @@ def profile():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
 
-    # Example: get user's watchList, favList, and friends from the database
-    watchList = user.watch_list_items  # adapt to your actual model
-    favList = user.favorite_items      # adapt to your actual model
-    friends = user.friends             # assuming user.friends is a list of User objects
+    watchList = [item for item in user.collection if item.category == 'watch']
+    favList = [item for item in user.collection if item.category == 'favourite']
+    friends = user.friends()
 
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
