@@ -17,7 +17,7 @@
     <title>FilmGraph Welcome Page</title>
 
 </head> 
-<body>
+<body data-show-dropdown="{{ show }}">
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -27,66 +27,59 @@
                 <li><a href="{{ url_for('home') }}">Home</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a id="loginBtn" href="#">Login <span class="caret"></span></a>
-                    <div id="loginDropdown" class="dropdown-content drop-right">       
-                        <div id="loginForm" class="form-container">
-                            <form name="login" action="" method="post">
-                                <div class="form-group">
-                                    {{ lForm.hidden_tag() }}
-                                    <p>
-                                        {{ lForm.username.label }}<br>
-                                        {{ lForm.username(size=20) }}
-                                        {% for error in lForm.username.errors %}
-                                        <span style="color:red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </p>
-                                    <p>
-                                        {{ lForm.password.label }}<br>
-                                        {{ lForm.password }}
-                                        {% for error in lForm.password.errors %}
-                                        <span style="color:red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </p>
-                                    <p> {{ lForm.submit_login() }}</p>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-                <li class="dropdown"><a id="signupBtn" href="#">Sign Up <span class="caret"></span></a>
-                    <div id="signupDropdown" class="dropdown-content drop-right">       
-                        <div id="signupForm" class="form-container">
-                            <form name="signup" action="" method="post">
-                                <div class="form-group">
-                                    {{ sForm.hidden_tag() }}
-                                    <p>
-                                        {{ sForm.username.label }}<br>
-                                        {{ sForm.username(size=20) }}
-                                        {% for error in sForm.username.errors %}
-                                        <span style="color:red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </p>
-                                    <p>
-                                        {{ sForm.password.label }}<br>
-                                        {{ sForm.password }}
-                                        {% for error in sForm.password.errors %}
-                                        <span style="color:red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </p>
-                                    <p>
-                                        {{ sForm.confirmPassword.label }}<br>
-                                        {{ sForm.confirmPassword }}
-                                        {% for error in sForm.confirmPassword.errors %}
-                                        <span style="color:red;">[{{ error }}]</span>
-                                        {% endfor %}
-                                    </p>
-                                    <p> {{ sForm.submit_signup() }}</p>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </li>
+                <li class="dropdown"><a id="loginBtn" href="#">Login <span class="caret"></span></a></li>
+                <li class="dropdown"><a id="signupBtn" href="#">Sign Up <span class="caret"></span></a></li>
             </ul>
+            <div id="loginDropdown" class="dropdown-login">       
+                <div id="loginForm" class="form-container">
+                    <form name="login" action="" method="post">
+                        <div class="form-group">
+                            {{ lForm.hidden_tag() }}
+                            <p>
+                                {{ lForm.username(class_="form-control", size=20, placeholder="Username") }}
+                                {% for error in login_errors.username %}
+                                <span style="color:#d9534f;">{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p>
+                                {{ lForm.password(class_="form-control", size=20, placeholder="Password") }}
+                                {% for error in login_errors.password %}
+                                <span style="color:#d9534f;">{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p> {{ lForm.submit_login(class="btn btn-primary form-control") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="signupDropdown" class="dropdown-login">       
+                <div id="signupForm" class="form-container">
+                    <form name="signup" action="" method="post">
+                        <div class="form-group">
+                            {{ sForm.hidden_tag() }}
+                            <p>
+                                {{ sForm.username(class_="form-control", size=20, placeholder="Username")}}
+                                {% for error in sForm.username.errors %}
+                                <span style="color:#d9534f;">{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p>
+                                {{ sForm.password(class_="form-control", size=20, placeholder="Password")}}
+                                {% for error in sForm.password.errors %}
+                                <span style="color:#d9534f;">{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p>
+                                {{ sForm.confirmPassword(class_="form-control", size=20, placeholder="Confirm Password") }}
+                                {% for error in sForm.confirmPassword.errors %}
+                                <span style="color:#d9534f;">{{ error }}</span>
+                                {% endfor %}
+                            </p>
+                            <p> {{ sForm.submit_signup(class="btn btn-primary form-control") }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -138,7 +131,8 @@
         </div>
     </section>
 
-    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/toggleDropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loginDropdown.js') }}"></script>
 
 </body>
 </html>

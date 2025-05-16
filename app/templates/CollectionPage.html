@@ -9,7 +9,7 @@
     {% endblock %}
 
     {% block content %}
-    <h1 class="pageTitle">My Collections</h1>
+    <h1 class="pageHeading">Collections</h1>
     
     <div class="container">
         <input id="searchFilm" class="form-control glyphicon glyphicon-search" type="text" placeholder="Find film in collection &#xe003">
@@ -78,7 +78,7 @@
     </div>
 
     <section class="container">
-        <h2>Watch List</h2>
+        <h2 class="sectionHeading">Watched</h2>
         <div class="movie-catalog">
             {% for film in watchList %}
             <div class="movie-card">
@@ -87,7 +87,7 @@
             </div>
             {% endfor %}
         </div>
-        <h2>Planning to See</h2>
+        <h2 class="sectionHeading">To Watch</h2>
         <div class="movie-catalog">
             {% for film in planList %}
             <div class="movie-card">
@@ -96,7 +96,7 @@
             </div>
             {% endfor %}
         </div>
-        <h2>Favourites</h2>
+        <h2 class="sectionHeading">Favourites</h2>
         <div class="movie-catalog">
             {% for film in favList %}
             <div class="movie-card">

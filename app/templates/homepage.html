@@ -8,19 +8,22 @@
     {% endblock %}
 
     {% block content %}
-    <h1 class="pageTitle">Welcome, {{username}}!</h1>
+    <h1 class="pageHeading">Welcome, @{{username}}!</h1>
 
     <section class="container">
-        <h2>Popular Now</h2>
+        <h2 class="sectionHeading">Popular Now</h2>
         <div class="movie-catalog">
             {% for movie in popular %}
-            <div class="movie-card">{{movie}}</div>
+            <div class="movie-card">
+                <p>{{ movie.title }}</p>
+                <img src="{{ url_for('static', filename=movie.poster[7:]) }}">
+            </div>
             {% endfor %}
         </div>
     </section>
 
     <section class="container">
-        <h2>Your Watchlist</h2>
+        <h2 class="sectionHeading">Your Watchlist</h2>
         <div class="movie-catalog">
             {% for (title, poster) in watchList %}
             <div class="movie-card">
@@ -31,8 +34,8 @@
         </div>
     </section>
 
-    <div class="container mt-4">
-        <h2>Recommended by Friends</h2>
+    <div class="container">
+        <h2 class="sectionHeading">Recommended by Friends</h2>
         <div class="row">
             {% for friend in recommended %}
             <div class="col-md-4">
