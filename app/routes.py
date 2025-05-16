@@ -62,7 +62,7 @@ def home():
     ]
     
     collections = current_user.collection
-    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
+    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched' or c.category == 'Favourite']
 
     recommended = [{"username": "Gary", "film": {"title": "Oppenheimer", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐⭐"}},
                     {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
