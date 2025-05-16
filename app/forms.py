@@ -38,7 +38,7 @@ class AddFilmForm(FlaskForm):
     film_title = StringField("Film Title", validators=[DataRequired(), Length(max=50)])
     release_year = IntegerField("Release Year", validators=[NumberRange(min=1910, max=datetime.datetime.now().year)])
     watch_date = DateField("Watch Date")
-    user_rating = RadioField("Rating", choices=[1,2,3,4,5])
+    user_rating = RadioField("Rating", choices=[1,2,3,4,5], validators=[Optional()])
     user_review = TextAreaField("Review", validators=[Length(max=300)])
     category = RadioField("Category", choices=["Watched", "To Watch"], validators=[DataRequired()])
 

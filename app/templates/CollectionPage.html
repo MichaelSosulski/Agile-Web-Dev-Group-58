@@ -37,7 +37,7 @@
                         <br>
                         {{ add_form.release_year }}
                         {% for error in add_form.release_year.errors %}
-                        <span class="error-msg">{{ error }}</span>
+                        <span class="error-msg"">{{ error }}</span>
                         {% endfor %}
                     </p>
                     <p>
@@ -71,20 +71,7 @@
                         <span class="error-msg">{{ error }}</span>
                         {% endfor %}
                     </p>
-                    <p class="category-group"> 
-                        {{ add_form.category.label }}
-                        <div class="category-options">
-                            {% for subfield in add_form.category %}
-                                <div class="category-item">
-                                    {{ subfield }} {{ subfield.label }}
-                                </div>
-                            {% endfor %}
-                        </div> 
-                        {% for error in add_form.category.errors %}
-                        <span class="error-msg">{{ error }}</span>
-                        {% endfor %}
-                    </p>
-                    <p> {{ add_form.submit_film(class="btn btn-primary") }}</p>
+                    <p> {{ add_form.submit_film() }}</p>
                 </form>
             </div>
         </div>
