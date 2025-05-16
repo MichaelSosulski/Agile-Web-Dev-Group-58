@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/addFilmDropdown.css') }}">  
+<title>FilmGraph Messages</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="pageHeading">{{ _('Messages') }}</h1>
+    <div class="messages-list">
+        {% for post in messages %}
+            <div class="message-item" style="margin-bottom: 1.5em;">
+                {% include '_post.html' %}
+            </div>
+        {% endfor %}
+    </div>
+    <nav aria-label="message navigation" class="text-center" style="margin-top: 2em;">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> {{ _('Newer messages') }}
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    {{ _('Older messages') }} <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+{% endblock %}

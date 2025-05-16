@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from app import db
 from app.models import User
 import datetime
+from flask_babel import _, lazy_gettext as _l
 
 class LoginForm(FlaskForm):
     username = StringField("Username:", validators=[DataRequired()])
@@ -76,18 +77,19 @@ class AddFilmForm(FlaskForm):
 class SendRequestForm(FlaskForm):
     submit = SubmitField('Send Request')
 
-
 class AcceptRequestForm(FlaskForm):
     submit = SubmitField('Accept Request')
-
 
 class DeclineRequestForm(FlaskForm):
     submit = SubmitField('Decline Request')
 
-
 class RemoveFriendForm(FlaskForm):
     submit = SubmitField('Remove Friend')
 
-
 class CancelRequestForm(FlaskForm):
     submit = SubmitField('Cancel Request')
+    
+# Message form
+class MessageForm(FlaskForm):
+    message = TextAreaField(_l('Message'), validators=[DataRequired(), Length(min=0, max=140)])
+    submit = SubmitField(_l('Submit'))
