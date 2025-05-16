@@ -5,7 +5,6 @@ const favRoute = "/fav_film";
 const searchBox = document.getElementById("searchFilm");
 const filmBox = document.getElementById("filmData");
 
-
 let searchTerm = '';
 let timeoutId;
 
@@ -57,14 +56,23 @@ function getUserFilmInfo(search) {
                     favBtn.innerText = "favourite";
                     filmDiv.appendChild(favBtn);
                     $(favBtn).click(function(){
-                        $.post(serverDomain + favRoute,
-                        {
-                            id: film.movie_id
+                    const settings = {
+                        async: true,
+                        crossDomain: true,
+                        url: serverDomain + favRoute,
+                        method: 'POST',
+                        headers: {"X-CSRF-TOKEN": document.getElementById("csrf_token").value},
+                        data: { id: film.movie_id }, // Include 'id' in the data
+                        success: function () {
+                            window.location.reload() //reload page
                         },
-                        function(){
-                        window.location.reload()
-                        });
-                    }); 
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error(jqXHR + "Error:" + textStatus + errorThrown);
+                            clearChildren(filmBox);
+                        }
+                    };
+                    $.ajax(settings);
+                    });
                     //delete button
                     const deleteBtn = document.createElement("btn");
                     deleteBtn.type = "button";
@@ -73,14 +81,23 @@ function getUserFilmInfo(search) {
                     deleteBtn.innerText = "remove";
                     filmDiv.appendChild(deleteBtn);
                     $(deleteBtn).click(function(){
-                        $.post(serverDomain + rmRoute,
-                        {
-                            id: film.movie_id
+                    const settings = {
+                        async: true,
+                        crossDomain: true,
+                        url: serverDomain + rmRoute,
+                        method: 'POST',
+                        headers: {"X-CSRF-TOKEN": document.getElementById("csrf_token").value},
+                        data: { id: film.movie_id }, // Include 'id' in the data
+                        success: function () {
+                            window.location.reload() //reload page
                         },
-                        function(){
-                        window.location.reload()
-                        });
-                    }); 
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.error(jqXHR + "Error:" + textStatus + errorThrown);
+                            clearChildren(filmBox);
+                        }
+                    };
+                    $.ajax(settings);
+                    });
                     //Populate userDiv
                     const userDiv = document.createElement("div");
                     userDiv.classList.add("col-md-5")

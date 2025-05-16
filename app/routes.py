@@ -62,7 +62,7 @@ def home():
     ]
     
     collections = current_user.collection
-    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
+    watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched' or c.category == 'Favourite']
 
     recommended = [{"username": "Gary", "film": {"title": "Oppenheimer", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐⭐"}},
                     {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
@@ -73,27 +73,36 @@ def home():
 @app.route('/Profile')
 @login_required
 def profile():
-    user = {"name": "Insert User Name", "image": "static/images/placeholder.jpg", "bio": "My Bio"}
-    watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
-                "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    user_id = user.user_id
     
-    favList = ["The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction"]
+    collections = get_movie_collection(user_id)
+    watchList = []
+    planList = []
+    favList = []
+    for item in collections:
+        if item['category'] == 'Watched' or item['category'] == 'Favourite':
+            watchList.append(item)
+        elif item['category'] == 'To Watch':
+            planList.append(item)
+        if item['category'] == 'Favourite':
+            favList.append(item)
+            
+    friends = user.friends()
 
-    friends = [{"username":"Friend_1", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_2", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_3", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
-                {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
-    
-    return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
+    return render_template(
+        'ProfilePage.html',
+        user=user,
+        watchList=watchList,
+        planList=planList,
+        favList=favList,
+        friends=friends,
+    )
 
 @app.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-
     watchList = [item for item in user.collection if item.category == 'watch']
     favList = [item for item in user.collection if item.category == 'favourite']
     friends = user.friends()
