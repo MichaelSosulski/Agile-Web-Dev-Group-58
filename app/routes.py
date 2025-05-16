@@ -1,3 +1,4 @@
+import base64, uuid, os
 from flask import request, redirect, url_for, render_template, flash
 from app import app, db
 from app.models import Movie, Collection, User, MovieGenre, Friend, Message
@@ -255,6 +256,7 @@ def messages():
 @login_required
 def stats():
     user_id = current_user.user_id
+    friends = current_user.friends()
 
     # Top genres
     genre_counts = (
@@ -305,8 +307,41 @@ def stats():
                             watched_titles=watched_titles,
                             watched_ratings=watched_ratings,
                             director_names=director_names,
-                            director_freqs=director_freqs)
+                            director_freqs=director_freqs, 
+                            friends=friends)
 
+@app.route('/send_chart', methods=['POST'])
+@login_required
+def send_chart():
+    # Parses JSON data from the request
+    data = request.get_json()
+    image_data = data.get('imageData')
+    recipient_id = data.get('recipient_id')
+
+    # Check if image data is provided 
+    if not image_data:
+        return jsonify({'message': 'No image data'}), 400
+
+    # Decode base64 image data
+    header, encoded = image_data.split(",", 1)
+    binary_data = base64.b64decode(encoded)
+
+    # Save the image to a file
+    filename = f"{uuid.uuid4()}.png" # Generate a unique filename
+    filepath = os.path.join("app/static/images/uploads", filename) # Build the file path
+    with open(filepath, "wb") as f: # Open the file in binary write mode
+        f.write(binary_data)
+
+    # Generate the URL to access the saved image
+    image_url = url_for('static', filename=f"images/uploads/{filename}")
+    body = f'<img src="{image_url}" alt="Shared Chart">'
+    
+    # Create a new message with the image URL
+    message = Message(sender_id=current_user.user_id, recipient_id=recipient_id, body=body)
+    db.session.add(message)
+    db.session.commit()
+
+    return jsonify({'message': 'Chart sent successfully!'})
 
 @app.route('/add_film', methods=['POST'])
 @login_required
