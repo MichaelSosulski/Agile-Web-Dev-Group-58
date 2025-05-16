@@ -40,6 +40,19 @@
                         <span class="error-msg"">{{ error }}</span>
                         {% endfor %}
                     </p>
+                    <p class="category-group">
+                        {{ add_form.category.label }}
+                        <div class="category-options">
+                            {% for subfield in add_form.category %}
+                                <div class="category-item">
+                                    {{ subfield }} {{ subfield.label }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% for error in add_form.category.errors %}
+                            <span class="error-msg">{{ error }}</span>
+                        {% endfor %}
+                    </p>
                     <p>
                         {{ add_form.watch_date.label }}
                         <small style="font-size: 0.8em; color: #666;">if Watched</small>
