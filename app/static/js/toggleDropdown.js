@@ -9,3 +9,15 @@ function toggleVisible(dropdownId) {
     });
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const formToShow = document.body.dataset.showForm;  // matches data-show-form in <body>
+
+    if (formToShow === "add") {
+        // Show the add film dropdown
+        document.getElementById("addDropdown").style.display = "block";
+    } else {
+        // Hide add film dropdown by default
+        document.getElementById("addDropdown").style.display = "none";
+    }
+});

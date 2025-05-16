@@ -38,13 +38,13 @@
                             <p>
                                 {{ lForm.username(class_="form-control", size=20, placeholder="Username") }}
                                 {% for error in login_errors.username %}
-                                <span style="color:#d9534f;">{{ error }}</span>
+                                <span>{{ error }}</span>
                                 {% endfor %}
                             </p>
                             <p>
                                 {{ lForm.password(class_="form-control", size=20, placeholder="Password") }}
                                 {% for error in login_errors.password %}
-                                <span style="color:#d9534f;">{{ error }}</span>
+                                <span>{{ error }}</span>
                                 {% endfor %}
                             </p>
                             <p> {{ lForm.submit_login(class="btn btn-primary form-control") }}</p>
@@ -60,19 +60,19 @@
                             <p>
                                 {{ sForm.username(class_="form-control", size=20, placeholder="Username")}}
                                 {% for error in sForm.username.errors %}
-                                <span style="color:#d9534f;">{{ error }}</span>
+                                <span>{{ error }}</span>
                                 {% endfor %}
                             </p>
                             <p>
                                 {{ sForm.password(class_="form-control", size=20, placeholder="Password")}}
                                 {% for error in sForm.password.errors %}
-                                <span style="color:#d9534f;">{{ error }}</span>
+                                <span>{{ error }}</span>
                                 {% endfor %}
                             </p>
                             <p>
                                 {{ sForm.confirmPassword(class_="form-control", size=20, placeholder="Confirm Password") }}
                                 {% for error in sForm.confirmPassword.errors %}
-                                <span style="color:#d9534f;">{{ error }}</span>
+                                <span>{{ error }}</span>
                                 {% endfor %}
                             </p>
                             <p> {{ sForm.submit_signup(class="btn btn-primary form-control") }}</p>

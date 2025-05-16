@@ -407,8 +407,9 @@ def add_film():
         )
         db.session.add(collection_entry)
         db.session.commit()
-
-    return redirect(url_for('collection'))
+        return redirect(url_for('collection'))
+    
+    return render_collection_page(add_form, show='add')
 
 @app.route('/fav_film', methods=['POST'])
 @login_required
@@ -448,11 +449,7 @@ def get_film(query):
     films = get_movie_collection(current_user.user_id, search=query)
     return films
 
-@app.route('/Collection')
-@login_required
-def collection():
-    add_film_form = AddFilmForm()
-    
+def render_collection_page(add_form, show=None):
     user_id = current_user.user_id
     collections = get_movie_collection(user_id)
     watchList = []
@@ -461,12 +458,18 @@ def collection():
     for item in collections:
         if item['category'] == 'Watched' or item['category'] == 'Favourite':
             watchList.append(item)
-        elif item['category'] == 'Planning To Watch':
+        elif item['category'] == 'To Watch':
             planList.append(item)
         if item['category'] == 'Favourite':
             favList.append(item)
 
-    return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
+    return render_template('CollectionPage.html', add_form=add_form, watchList=watchList, favList=favList, planList=planList, show=show)
+
+@app.route('/Collection')
+@login_required
+def collection():
+    add_film_form = AddFilmForm()
+    return render_collection_page(add_film_form)
 
 @app.route('/logout')
 @login_required
