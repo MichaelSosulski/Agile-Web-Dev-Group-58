@@ -57,7 +57,6 @@ export SECRET_KEY='secret_key'
 To initialise the database, run the following commands: 
 
 ```bash
-# Delete old migrations folder if present with `rm -r migrations`
 flask db init        # Initialize the migrations folder
 flask db migrate     # Create the migration file 
 flask db upgrade     # Apply migrations to the database
