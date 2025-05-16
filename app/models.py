@@ -1,6 +1,7 @@
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from datetime import datetime, timezone
 
 #Movie data
 class Movie(db.Model):
@@ -30,6 +31,9 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(256), nullable=True)
     collection = db.relationship('Collection', back_populates='user')
     
+    def avatar(self):
+        return url_for('static', filename='images/placeholder.jpg')
+    
     friend_requests_sent = db.relationship(
         'Friend',
         foreign_keys='Friend.friend_a_id',
@@ -50,12 +54,14 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
     
+    # ---- Passwords ----
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    # ---- Friends ----
     # Get list of friends where is_friend is True
     def friends(self):
         sent = [f.friend_b for f in self.friend_requests_sent if f.is_friend]
@@ -86,6 +92,28 @@ class User(UserMixin, db.Model):
 
     def is_friends_with(self, user):
         return any(friend.user_id == user.user_id for friend in self.friends())
+    
+    # ---- Messaging ----
+    last_message_read_time = db.Column(db.DateTime)
+
+    messages_sent = db.relationship(
+        'Message',
+        foreign_keys='Message.sender_id',
+        back_populates='author'
+    )
+    messages_received = db.relationship(
+        'Message',
+        foreign_keys='Message.recipient_id',
+        back_populates='recipient'
+    )
+
+    def unread_message_count(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        query = db.session.query(Message).filter(
+            Message.recipient == self,
+            Message.timestamp > last_read_time
+        )
+        return query.count()
 
 #User and movie are attibutes of a collection as a single movie can be in multiple collections
 class Collection(db.Model):
@@ -118,6 +146,19 @@ class Post(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     sender = db.relationship('User', foreign_keys=[sender_id])
     receiver = db.relationship('User', foreign_keys=[receiver_id])
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), index=True)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), index=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=lambda: datetime.now(timezone.utc))
+    
+    author = db.relationship('User', foreign_keys=[sender_id], back_populates='messages_sent')
+    recipient = db.relationship('User', foreign_keys=[recipient_id], back_populates='messages_received')
+
+    def __repr__(self):
+        return f'<Message {self.body}>'
     
 @login.user_loader
 def load_user(id):

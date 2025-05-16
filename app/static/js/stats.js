@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     // 1. Top Genres - Pie Chart
     const genreData = [{
         values: chartGenreValues,
@@ -45,5 +47,32 @@ document.addEventListener("DOMContentLoaded", function () {
         title: 'Favourite Directors',
         xaxis: { title: 'Director' },
         yaxis: { title: 'Number of Films Watched', dtick: 1 }
+    });
+
+    // Send chart to friend button handler
+    document.getElementById("sendChart").addEventListener("click", function () {
+        const recipientSelect = document.getElementById('recipientSelect');
+        const recipientId = recipientSelect.value;  // get selected friend user_id
+
+        // Convert Plotly chart to image
+        Plotly.toImage('genreChart', { format: 'png', width: 700, height: 500 })
+            .then(function (dataUrl) {
+                // Send POST request to /send_chart with imageData and recipient_id
+                fetch('/send_chart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken  // Include CSRF token for security
+                    },
+                    body: JSON.stringify({
+                        imageData: dataUrl,
+                        recipient_id: recipientId
+                    })
+                })
+                // Handle the server's response
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => console.error('Error:', error));
+            });
     });
 });

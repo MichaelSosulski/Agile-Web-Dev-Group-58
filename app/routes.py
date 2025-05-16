@@ -1,12 +1,14 @@
+import base64, uuid, os
 from flask import request, redirect, url_for, render_template, flash
 from app import app, db
-from app.models import Movie, Collection, User, MovieGenre, Friend
+from app.models import Movie, Collection, User, MovieGenre, Friend, Message
 from datetime import datetime
 from flask_login import current_user, login_user, login_required, logout_user
 import sqlalchemy as sa
-from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm, CancelRequestForm
+from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm, CancelRequestForm, MessageForm
 from flask import jsonify
-from sqlalchemy import func
+from sqlalchemy import func, or_
+from flask_babel import _, lazy_gettext as _l
 
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
@@ -27,7 +29,7 @@ def welcome():
                 login_user(user)
                 flash('Logged in successfully', 'success')
                 return redirect('/Homepage')
-              
+
     elif 'submit_signup' in request.form:
         show = 'signup'
         if sForm.validate_on_submit():
@@ -85,6 +87,17 @@ def profile():
                 {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
                 {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
     
+    return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+
+    watchList = [item for item in user.collection if item.category == 'watch']
+    favList = [item for item in user.collection if item.category == 'favourite']
+    friends = user.friends()
+
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
 @app.route('/Friends')
@@ -213,10 +226,37 @@ def remove_friend(username):
 
     return redirect(url_for('friends'))
 
+@app.route('/send_message/<recipient>', methods=['GET', 'POST'])
+@login_required
+def send_message(recipient):
+    user = db.first_or_404(sa.select(User).where(User.username == recipient))
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=current_user, recipient=user, body=form.message.data)
+        db.session.add(msg)
+        db.session.commit()
+        flash(_('Your message has been sent.'))
+        return redirect(url_for('messages', username=recipient))
+    return render_template('sendMessage.html', title=_('Send Message'), form=form, recipient=recipient)
+
+@app.route('/messages')
+@login_required
+def messages():
+    # Get all messages sent and received, ordered by newest first
+    messages = Message.query.filter(
+        or_(
+            Message.author == current_user,
+            Message.recipient == current_user
+        )
+    ).order_by(Message.timestamp.desc()).all()
+
+    return render_template('messages.html', messages=messages, current_user=current_user)
+
 @app.route('/Stats')
 @login_required
 def stats():
     user_id = current_user.user_id
+    friends = current_user.friends()
 
     # Top genres
     genre_counts = (
@@ -267,8 +307,41 @@ def stats():
                             watched_titles=watched_titles,
                             watched_ratings=watched_ratings,
                             director_names=director_names,
-                            director_freqs=director_freqs)
+                            director_freqs=director_freqs, 
+                            friends=friends)
 
+@app.route('/send_chart', methods=['POST'])
+@login_required
+def send_chart():
+    # Parses JSON data from the request
+    data = request.get_json()
+    image_data = data.get('imageData')
+    recipient_id = data.get('recipient_id')
+
+    # Check if image data is provided 
+    if not image_data:
+        return jsonify({'message': 'No image data'}), 400
+
+    # Decode base64 image data
+    header, encoded = image_data.split(",", 1)
+    binary_data = base64.b64decode(encoded)
+
+    # Save the image to a file
+    filename = f"{uuid.uuid4()}.png" # Generate a unique filename
+    filepath = os.path.join("app/static/images/uploads", filename) # Build the file path
+    with open(filepath, "wb") as f: # Open the file in binary write mode
+        f.write(binary_data)
+
+    # Generate the URL to access the saved image
+    image_url = url_for('static', filename=f"images/uploads/{filename}")
+    body = f'<img src="{image_url}" alt="Shared Chart">'
+    
+    # Create a new message with the image URL
+    message = Message(sender_id=current_user.user_id, recipient_id=recipient_id, body=body)
+    db.session.add(message)
+    db.session.commit()
+
+    return jsonify({'message': 'Chart sent successfully!'})
 
 @app.route('/add_film', methods=['POST'])
 @login_required
@@ -361,12 +434,12 @@ def rm_film():
     if request.method == 'POST':
         id = request.form['id']
         film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
-           Movie.movie_id == id).one_or_none()
+            Movie.movie_id == id).one_or_none()
         if film != None:
             db.session.delete(film)
             db.session.commit()
         else:
-           flash("Can't delete non-existent collection item.")
+            flash("Can't delete non-existent collection item.")
     return redirect(url_for('collection'))
 
 @app.route('/get_film/<query>')
@@ -396,6 +469,7 @@ def collection():
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('welcome'))
