@@ -70,6 +70,7 @@ const filmSubmit = addFilmForm.elements["submit_film"];
 //event listener for when the user clicks submit on the form
 addFilmForm.addEventListener("submit", function(e) {
 	e.preventDefault(); //Prevents form submission
+	clearBtn.disabled = true;
 	
 	//Show that the request is loading
 	filmSubmit.disabled = true;
