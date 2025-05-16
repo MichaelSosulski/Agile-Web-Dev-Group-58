@@ -1,6 +1,6 @@
 import base64, uuid, os
 from flask import request, redirect, url_for, render_template, flash
-from app import app, db
+from app import db
 from app.models import Movie, Collection, User, MovieGenre, Friend, Message
 from datetime import datetime
 from flask_login import current_user, login_user, login_required, logout_user
@@ -9,8 +9,11 @@ from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, Accep
 from flask import jsonify
 from sqlalchemy import func, or_
 from flask_babel import _, lazy_gettext as _l
+from flask import Blueprint
+bp = Blueprint('main', __name__)
 
-@app.route('/', methods=['GET', 'POST'])
+
+@bp.route('/', methods=['GET', 'POST'])
 def welcome():
     lForm = LoginForm()
     sForm = SignupForm()
@@ -45,7 +48,7 @@ def welcome():
     return render_template('WelcomePage.html', lForm=lForm, sForm=sForm, 
                             login_errors=lForm.errors, signup_errors=sForm.errors, show=show)
 
-@app.route('/Homepage')
+@bp.route('/Homepage')
 @login_required
 def home():
     username = current_user.username
@@ -70,7 +73,7 @@ def home():
 
     return render_template('homepage.html', username=username, popular=popular, watchList=watchList, recommended=recommended)
 
-@app.route('/Profile')
+@bp.route('/Profile')
 @login_required
 def profile():
     user = {"name": "Insert User Name", "image": "static/images/placeholder.jpg", "bio": "My Bio"}
@@ -89,7 +92,7 @@ def profile():
     
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
-@app.route('/user/<username>')
+@bp.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -100,7 +103,7 @@ def user(username):
 
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
-@app.route('/Friends')
+@bp.route('/Friends')
 @login_required
 def friends():
     send_request_form = SendRequestForm()
@@ -132,7 +135,7 @@ def friends():
                             users_to_request=users_to_request, 
                             pending_recipient_ids=pending_recipient_ids)
 
-@app.route('/Friends/request/send/<username>', methods=['POST'])
+@bp.route('/Friends/request/send/<username>', methods=['POST'])
 @login_required
 def send_request(username):
     
@@ -158,9 +161,9 @@ def send_request(username):
     else:
         flash("Invalid form submission.")
         
-    return redirect(url_for('friends'))
+    return redirect(url_for('main.friends'))
 
-@app.route('/Friends/request/cancel/<username>', methods=['POST'])
+@bp.route('/Friends/request/cancel/<username>', methods=['POST'])
 @login_required
 def cancel_request(username):
     user_to_cancel = User.query.filter_by(username=username).first_or_404()
@@ -176,9 +179,9 @@ def cancel_request(username):
         db.session.delete(friend_request)
         db.session.commit()
 
-    return redirect(url_for('friends'))
+    return redirect(url_for('main.friends'))
 
-@app.route('/Friends/request/accept/<username>')
+@bp.route('/Friends/request/accept/<username>')
 @login_required
 def accept_request(username):
     # Find the user who sent the request
@@ -191,9 +194,9 @@ def accept_request(username):
         friend_request.is_friend = True
         db.session.commit()
 
-    return redirect(url_for('friends'))
+    return redirect(url_for('main.friends'))
 
-@app.route('/Friends/request/decline/<username>')
+@bp.route('/Friends/request/decline/<username>')
 @login_required
 def decline_request(username):
     # Find the user who sent the request
@@ -206,9 +209,9 @@ def decline_request(username):
         db.session.delete(friend_request)
         db.session.commit()
 
-    return redirect(url_for('friends'))
+    return redirect(url_for('main.friends'))
 
-@app.route('/Friends/request/remove/<username>')
+@bp.route('/Friends/request/remove/<username>')
 @login_required
 def remove_friend(username):
     # Find the friend user
@@ -224,9 +227,9 @@ def remove_friend(username):
         db.session.delete(friendship)
         db.session.commit()
 
-    return redirect(url_for('friends'))
+    return redirect(url_for('main.friends'))
 
-@app.route('/send_message/<recipient>', methods=['GET', 'POST'])
+@bp.route('/send_message/<recipient>', methods=['GET', 'POST'])
 @login_required
 def send_message(recipient):
     user = db.first_or_404(sa.select(User).where(User.username == recipient))
@@ -236,10 +239,10 @@ def send_message(recipient):
         db.session.add(msg)
         db.session.commit()
         flash(_('Your message has been sent.'))
-        return redirect(url_for('messages', username=recipient))
+        return redirect(url_for('main.messages', username=recipient))
     return render_template('sendMessage.html', title=_('Send Message'), form=form, recipient=recipient)
 
-@app.route('/messages')
+@bp.route('/messages')
 @login_required
 def messages():
     # Get all messages sent and received, ordered by newest first
@@ -252,7 +255,7 @@ def messages():
 
     return render_template('messages.html', messages=messages, current_user=current_user)
 
-@app.route('/Stats')
+@bp.route('/Stats')
 @login_required
 def stats():
     user_id = current_user.user_id
@@ -310,7 +313,7 @@ def stats():
                             director_freqs=director_freqs, 
                             friends=friends)
 
-@app.route('/send_chart', methods=['POST'])
+@bp.route('/send_chart', methods=['POST'])
 @login_required
 def send_chart():
     # Parses JSON data from the request
@@ -343,7 +346,7 @@ def send_chart():
 
     return jsonify({'message': 'Chart sent successfully!'})
 
-@app.route('/add_film', methods=['POST'])
+@bp.route('/add_film', methods=['POST'])
 @login_required
 def add_film():
     add_form = AddFilmForm()
@@ -371,7 +374,7 @@ def add_film():
             Movie.title == title, Movie.release_year == release_year).one_or_none()
         if in_collection != None:
             flash("This film is already in your collection.")
-            return redirect(url_for('collection'))
+            return redirect(url_for('main.collection'))
 
         #Check if movie is already in db, if it is not, add it
         find_film = Movie.query.filter(Movie.title==title, Movie.release_year==release_year).one_or_none()
@@ -407,11 +410,11 @@ def add_film():
         )
         db.session.add(collection_entry)
         db.session.commit()
-        return redirect(url_for('collection'))
+        return redirect(url_for('main.collection'))
     
     return render_collection_page(add_form, show='add')
 
-@app.route('/fav_film', methods=['POST'])
+@bp.route('/fav_film', methods=['POST'])
 @login_required
 def fav_film():
     user_id = current_user.user_id
@@ -425,9 +428,9 @@ def fav_film():
             db.session.commit()
         else:
             flash("film is not in Watched List")
-    return redirect(url_for('collection'))
+    return redirect(url_for('main.collection'))
 
-@app.route('/rm_film', methods=['POST'])
+@bp.route('/rm_film', methods=['POST'])
 @login_required
 def rm_film():
     user_id = current_user.user_id
@@ -441,9 +444,9 @@ def rm_film():
             db.session.commit()
         else:
             flash("Can't delete non-existent collection item.")
-    return redirect(url_for('collection'))
+    return redirect(url_for('main.collection'))
 
-@app.route('/get_film/<query>')
+@bp.route('/get_film/<query>')
 @login_required
 def get_film(query):
     films = get_movie_collection(current_user.user_id, search=query)
@@ -465,17 +468,17 @@ def render_collection_page(add_form, show=None):
 
     return render_template('CollectionPage.html', add_form=add_form, watchList=watchList, favList=favList, planList=planList, show=show)
 
-@app.route('/Collection')
+@bp.route('/Collection')
 @login_required
 def collection():
     add_film_form = AddFilmForm()
     return render_collection_page(add_film_form)
 
-@app.route('/logout')
+@bp.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('welcome'))
+    return redirect(url_for('main.welcome'))
 
 def get_movie_collection(user_id, search=None):
     """

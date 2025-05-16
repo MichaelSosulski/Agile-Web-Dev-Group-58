@@ -24,8 +24,8 @@
                             {{ user.username }}
                         </div>
                         <div>
-                            <a href="{{ url_for('accept_request', username=user.username) }}" class="btn btn-sm btn-success me-1">Accept</a>
-                            <a href="{{ url_for('decline_request', username=user.username) }}" class="btn btn-sm btn-danger">Decline</a>
+                            <a href="{{ url_for('main.accept_request', username=user.username) }}" class="btn btn-sm btn-success me-1">Accept</a>
+                            <a href="{{ url_for('main.decline_request', username=user.username) }}" class="btn btn-sm btn-danger">Decline</a>
                         </div>
                     </li>
                     {% endfor %}
@@ -41,11 +41,11 @@
                     <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
                         alt="{{ friend.username }} avatar" class="rounded-circle mr-3" width="40" height="40">
                     {{ friend.username }}
-                    <a href="{{ url_for('remove_friend', username=friend.username) }}" 
+                    <a href="{{ url_for('main.remove_friend', username=friend.username) }}" 
                         class="btn btn-sm btn-outline-danger ms-auto">
                         Remove Friend
                     </a>
-                    <a href="{{ url_for('send_message', recipient=friend.username) }}" 
+                    <a href="{{ url_for('main.send_message', recipient=friend.username) }}" 
                         class="btn btn-sm btn-outline-primary ms-auto me-2">
                         Send Message
                     </a>
@@ -67,12 +67,12 @@
                         </div>
                         <div class="ms-auto d-flex gap-1">
                             {% if user.user_id in pending_recipient_ids %}
-                            <form method="POST" action="{{ url_for('cancel_request', username=user.username) }}">
+                            <form method="POST" action="{{ url_for('main.cancel_request', username=user.username) }}">
                                 {{ cancel_request_form.hidden_tag() }}
                                 <button type="submit" class="btn btn-warning btn-sm">Cancel Request</button>
                             </form>
                             {% else %}
-                            <form method="POST" action="{{ url_for('send_request', username=user.username) }}">
+                            <form method="POST" action="{{ url_for('main.send_request', username=user.username) }}">
                                 {{ send_request_form.hidden_tag() }}
                                 {{ send_request_form.submit(class="btn btn-primary btn-sm") }}
                             </form>
