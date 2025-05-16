@@ -1,26 +1,27 @@
-// Ensure DOM content is loaded before executing scripts
-document.addEventListener("DOMContentLoaded", function() {
-    
-    // Set active navbar item
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Set active navbar item
     function setActiveNavbar() {
         const pageName = document.title.split(" ")[1];
         const navbarItem = document.getElementById(pageName);
         if (navbarItem) {
-            navbarItem.className = "active";
+            navbarItem.classList.add("active");  // Use classList.add() to safely add 'active'
         }
     }
     setActiveNavbar();
 
-    // Dropdown handling
+    // 2. Dropdown handling
     function toggleVisible(dropdownId) {
         const dropdown = document.getElementById(dropdownId);
         if (dropdown) {
             document.querySelectorAll(".dropdown-content").forEach(container => {
-                container.style.display = container.id !== dropdownId ? "none" : container.style.display === "block" ? "none" : "block";
+                container.style.display = container.id !== dropdownId
+                    ? "none"
+                    : container.style.display === "block" ? "none" : "block";
             });
         }
     }
 
+    // Close dropdowns if click is outside
     window.addEventListener("click", (e) => {
         let parent = e.target.closest(".dropdown");
         if (!parent) {
@@ -32,18 +33,23 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // Ensure login and signup buttons exist before adding event listeners
+    // 3. Login and signup buttons
     const loginBtn = document.getElementById("loginBtn");
     const signupBtn = document.getElementById("signupBtn");
 
     if (loginBtn) {
-        loginBtn.addEventListener("click", function() { toggleVisible("loginDropdown"); });
-    }
-    if (signupBtn) {
-        signupBtn.addEventListener("click", function() { toggleVisible("signupDropdown"); });
+        loginBtn.addEventListener("click", function () {
+            toggleVisible("loginDropdown");
+        });
     }
 
-    // Enable horizontal scrolling for image selection
+    if (signupBtn) {
+        signupBtn.addEventListener("click", function () {
+            toggleVisible("signupDropdown");
+        });
+    }
+
+    // 4. Enable horizontal scrolling for image containers
     document.querySelectorAll(".image-scroll").forEach(container => {
         container.addEventListener("wheel", (event) => {
             event.preventDefault();
@@ -51,116 +57,129 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
-
-
-document.addEventListener("click", function(event) {
-    const navbarProfile = document.getElementById("navbarProfile");
-
-    if (event.target === navbarProfile) {
-        event.preventDefault(); // STOP removing navigation
-    }
-});
-
-
-document.addEventListener("click", function(event) {
-    const navbarProfile = document.getElementById("navbarProfile");
-
-    // Ignore clicks on the navbar profile image
-    if (event.target === navbarProfile) {
-        event.preventDefault(); // Stop event propagation
-        return;
-    }
-
-    // Handle clicks on selectable avatars
-    if (event.target.matches(".nav-profile") && event.target.id !== "navbarProfile") {
-        const selectedImage = event.target.src;
-
-        fetch("/update-profile-image", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image_url: selectedImage })
-        }).then(response => response.json()).then(data => {
-            if (data.success) {
-                document.querySelector(".nav-profile").src = data.image_url; // Update navbar instantly
+    // 5. Fetch and show saved profile image on page load
+    fetch("/get-profile-image", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.image_url) {
+            const navbarImg = document.getElementById("navbarProfile");
+            if (navbarImg) {
+                navbarImg.src = data.image_url;
             }
-        }).catch(error => {
-            console.error("Error updating profile image:", error);
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching profile image:", error);
+    });
+
+    // 6. Handle avatar selection clicks
+    document.addEventListener("click", function (event) {
+        const clickedImage = event.target;
+
+        if (
+            clickedImage.classList.contains("nav-profile") &&
+            clickedImage.id !== "navbarProfile"
+        ) {
+            const selectedImage = clickedImage.src;
+
+            fetch("/update-profile-image", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ image_url: selectedImage })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const navbarProfile = document.getElementById("navbarProfile");
+                    if (navbarProfile) {
+                        navbarProfile.src = data.image_url;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error updating profile image:", error);
+            });
+        }
+    });
+
+    // 7. Handle custom image upload
+    const fileInput = document.getElementById("fileInput");
+    if (fileInput) {
+        fileInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append("profileImage", file);
+
+            fetch("/upload-profile-image", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const navbarImg = document.getElementById("navbarProfile");
+                    if (navbarImg) {
+                        navbarImg.src = data.image_url;
+                    }
+                } else {
+                    console.error("Error uploading image:", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Upload failed:", error);
+            });
         });
     }
-});
 
-
-
-
-    // Ensure Submit Your Own Image button works
+    // 8. Show custom image upload box
     const submitOwnBtn = document.getElementById("submitOwnBtn");
     const uploadBox = document.getElementById("uploadBox");
 
     if (submitOwnBtn && uploadBox) {
-        submitOwnBtn.addEventListener("click", function() {
-            uploadBox.classList.remove("hidden"); // Show upload box
-            this.style.display = "none"; // Hide button
+        submitOwnBtn.addEventListener("click", function () {
+            uploadBox.classList.remove("hidden");
+            this.style.display = "none";
         });
-    } else {
-        console.error("Error: #submitOwnBtn or #uploadBox not found.");
     }
 
     console.log("navbar.js loaded correctly!");
-});
 
-document.getElementById("submitOwnBtn").addEventListener("click", function() {
-    document.getElementById("uploadBox").classList.remove("hidden"); // Show upload box
-    this.style.display = "none"; // Hide button
-});
 
-document.getElementById("fileInput").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+    document.querySelectorAll('.nav-profile').forEach(function(img) {
+        img.addEventListener('click', function() {
+            const selectedAvatar = img.getAttribute('data-avatar');
+            const profileImage = document.querySelector('.user-profile img');  // Assuming this is where you show the user's profile image
+            profileImage.src = "{{ url_for('static', filename='') }}" + selectedAvatar;
 
-    const formData = new FormData();
-    formData.append("profileImage", file);
-
-    fetch("/upload-profile-image", {
-        method: "POST",
-        body: formData
-    }).then(response => response.json()).then(data => {
-        if (data.success) {
-            document.querySelector(".nav-profile").src = data.image_url; // Update navbar instantly
-        } else {
-            console.error("Error uploading image:", data.message);
-        }
-    }).catch(error => {
-        console.error("Upload failed:", error);
+            // You can also send the selected avatar to your server and update the user's profile in the database
+            fetch('/update-avatar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ avatar: selectedAvatar }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Avatar updated successfully!");
+                } else {
+                    console.error("Error updating avatar");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
     });
 });
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Set active navbar item
-    function setActiveNavbar() {
-        const pageName = document.title.split(" ")[1];
-        const navbarItem = document.getElementById(pageName);
-        if (navbarItem) {
-            navbarItem.className = "active";
-        }
-    }
-    setActiveNavbar();
-
-    // Fetch the profile image on page load if user is logged in
-    fetch("/get-profile-image", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-    }).then(response => response.json()).then(data => {
-        if (data.image_url) {
-            document.querySelector(".nav-profile").src = data.image_url; // Update navbar profile image
-        }
-    }).catch(error => {
-        console.error("Error fetching profile image:", error);
-    });
-
-    // Other logic for dropdowns, etc.
-});
 
 
 

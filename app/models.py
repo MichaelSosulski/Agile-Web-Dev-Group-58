@@ -1,6 +1,8 @@
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from flask import url_for
+
 
 #Movie data
 class Movie(db.Model):
@@ -29,6 +31,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=True)
     collection = db.relationship('Collection', back_populates='user')
+    profile_image = db.Column(db.String(256), nullable=True)
     
     def get_id(self):
         return str(self.user_id)
@@ -41,6 +44,11 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def avatar(self):
+        if self.profile_image:
+            return url_for('static', filename=self.profile_image)
+        return url_for('static', filename='images/placeholder.jpg')
 
 #User and movie are attibutes of a collection as a single movie can be in multiple collections
 class Collection(db.Model):

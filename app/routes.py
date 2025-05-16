@@ -7,6 +7,9 @@ import sqlalchemy as sa
 from app.forms import LoginForm, SignupForm, AddFilmForm
 from flask import jsonify
 from sqlalchemy import func
+import os
+import uuid
+from werkzeug.utils import secure_filename
 
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
@@ -57,7 +60,7 @@ def home():
 @app.route('/Profile')
 @login_required
 def profile():
-    user = {"name": "Insert User Name", "image": "static/images/placeholder.jpg", "bio": "My Bio"}
+    user = {"name": "Insert User Name", "image": f'images/{current_user.profile_image or "placeholder.jpg"}', "bio": "My Bio"}
     watchList = ["The Shawshank Redemption", "The Godfather", "The Dark Knight", 
                 "The Godfather Part II", "12 Angry Men", "Schindler's List", 
                 "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
@@ -217,27 +220,69 @@ def logout():
 
 
 
-UPLOAD_FOLDER = 'static/images/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+@app.route('/get-profile-image', methods=['GET'])
+@login_required
+def get_profile_image():
+    return jsonify({"image_url": current_user.avatar()})
 
 
 
 @app.route('/update-profile-image', methods=['POST'])
+@login_required
 def update_profile_image():
     data = request.get_json()
-
     if not data or 'image_url' not in data:
         return jsonify({"success": False, "message": "Invalid request"}), 400
 
-    current_user.image = data['image_url']  # Store updated profile image
+    # Extract filename from the image URL (assuming the URL is correct)
+    filename = data['image_url'].split("/static/uploads/")[-1] if "/static/uploads/" in data['image_url'] else None
+    if filename:
+        current_user.profile_image = filename
+        db.session.commit()
+        return jsonify({"success": True, "image_url": current_user.avatar()})
+    else:
+        return jsonify({"success": False, "message": "Invalid image URL"}), 400
+
+
+@app.route('/upload-profile-image', methods=['POST'])
+@login_required
+def upload_profile_image():
+    if 'profileImage' not in request.files:
+        return jsonify({"success": False, "message": "No file uploaded"}), 400
+
+    file = request.files['profileImage']
+    if file.filename == '':
+        return jsonify({"success": False, "message": "No selected file"}), 400
+
+    filename = secure_filename(file.filename)
+    unique_filename = f"{uuid.uuid4().hex}_{filename}"
+    upload_path = os.path.join(app.root_path, 'static/uploads', unique_filename)
+    file.save(upload_path)
+
+
+    current_user.profile_image = f'uploads/{unique_filename}'
     db.session.commit()
 
-    return jsonify({"success": True, "image_url": current_user.image})  # Ensure navbar uses the latest image
+    return jsonify({
+        "success": True,
+        "image_url": url_for('static', filename=f'uploads/{unique_filename}')
+    })
+
+
+@app.route('/update-avatar', methods=['POST'])
+@login_required
+def update_avatar():
+    avatar = request.json.get('avatar')
+
+    if not avatar:
+        return jsonify({'success': False, 'message': 'No avatar provided'}), 400
+
+    current_user.profile_image = avatar
+    db.session.commit()
+
+    image_url = url_for('static', filename=f'images/{avatar}')
+    return jsonify({'success': True, 'image_url': image_url}), 200
+
 
 
 

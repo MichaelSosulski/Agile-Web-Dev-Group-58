@@ -10,15 +10,15 @@
 
 {% block content %}
 <div class="container">
+    <h2>{{ current_user.username }}</h2>
+    <br><br>
     <div class="row">
         <div class="col-md-6">
-            <h1 class="pageTitle">{{user.name}}</h1>
-            <p>{{user.bio}}</p>
-        </div>
-        <div class="col-md-6">
-            <img src="{{user.image}}" alt="User Profile Image">
+            <img src="{{ url_for('static', filename=user.profile_image if user.profile_image else 'images/characters/placeholder.jpg') }}" alt="User Profile Image" 
+                style="border-radius: 50%; width: 300px; height: 300px; object-fit: cover;">
             <button id="changeAvatarBtn" class="btn btn-primary mt-2">Change avatar</button>
         </div>
+
     </div>
 
     <!-- Modal -->
@@ -26,46 +26,44 @@
         <div class="modal-box">
             <h2>Select a default avatar or choose your own!</h2>
             <ul class="avatar-category-list">
-
                 <li><h3>Star Wars</h3></li>
                 <div class="image-scroll">
-                    <img src="{{ url_for('static', filename='images/characters/starwars/luke.jpg') }}" alt="Luke Skywalker" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/starwars/darth_vader.jpg') }}" alt="Darth Vader" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/starwars/yoda.jpg') }}" alt="Yoda" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/starwars/chewbacca.jpg') }}" alt="Chewbacca" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/starwars/han_solo.jpg') }}" alt="Han Solo" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/starwars/mandalorian.jpg') }}" alt="Mandalorian" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/luke.jpg') }}" alt="Luke Skywalker" class="nav-profile" data-avatar="characters/starwars/luke.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/darth_vader.jpg') }}" alt="Darth Vader" class="nav-profile" data-avatar="characters/starwars/darth_vader.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/yoda.jpg') }}" alt="Yoda" class="nav-profile" data-avatar="characters/starwars/yoda.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/chewbacca.jpg') }}" alt="Chewbacca" class="nav-profile" data-avatar="characters/starwars/chewbacca.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/han_solo.jpg') }}" alt="Han Solo" class="nav-profile" data-avatar="characters/starwars/han_solo.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/mandalorian.jpg') }}" alt="Mandalorian" class="nav-profile" data-avatar="characters/starwars/mandalorian.jpg">
                 </div>
 
                 <li><h3>Simpsons</h3></li>
                 <div class="image-scroll">
-                    <img src="{{ url_for('static', filename='images/characters/simpsons/homer.png') }}" alt="Homer" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/simpsons/bart.png') }}" alt="Bart" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/simpsons/marge.png') }}" alt="Marge" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/simpsons/lisa.png') }}" alt="Lisa" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/simpsons/maggie.jpg') }}" alt="Maggie" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/homer.png') }}" alt="Homer" class="nav-profile" data-avatar="characters/simpsons/homer.png">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/bart.png') }}" alt="Bart" class="nav-profile" data-avatar="characters/simpsons/bart.png">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/marge.png') }}" alt="Marge" class="nav-profile" data-avatar="characters/simpsons/marge.png">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/lisa.png') }}" alt="Lisa" class="nav-profile" data-avatar="characters/simpsons/lisa.png">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/maggie.jpg') }}" alt="Maggie" class="nav-profile" data-avatar="characters/simpsons/maggie.jpg">
                 </div>
 
                 <li><h3>Stranger Things</h3></li>
                 <div class="image-scroll">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/eleven.jpg') }}" alt="Eleven" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/hopper.jpg') }}" alt="Hopper" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/will.jpg') }}" alt="Will" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/nancy.jpg') }}" alt="Nancy" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/steve.jpg') }}" alt="Steve" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/vecna.jpg') }}" alt="Vecna" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/dustin.jpg') }}" alt="Dustin" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/lucas.jpg') }}" alt="Lucas" class="nav-profile">
-                    <img src="{{ url_for('static', filename='images/characters/strangerthings/max.jpg') }}" alt="Max" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/eleven.jpg') }}" alt="Eleven" class="nav-profile" data-avatar="characters/strangerthings/eleven.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/hopper.jpg') }}" alt="Hopper" class="nav-profile" data-avatar="characters/strangerthings/hopper.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/will.jpg') }}" alt="Will" class="nav-profile" data-avatar="characters/strangerthings/will.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/nancy.jpg') }}" alt="Nancy" class="nav-profile" data-avatar="characters/strangerthings/nancy.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/steve.jpg') }}" alt="Steve" class="nav-profile" data-avatar="characters/strangerthings/steve.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/vecna.jpg') }}" alt="Vecna" class="nav-profile" data-avatar="characters/strangerthings/vecna.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/dustin.jpg') }}" alt="Dustin" class="nav-profile" data-avatar="characters/strangerthings/dustin.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/lucas.jpg') }}" alt="Lucas" class="nav-profile" data-avatar="characters/strangerthings/lucas.jpg">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/max.jpg') }}" alt="Max" class="nav-profile" data-avatar="characters/strangerthings/max.jpg">
                 </div>
-                
             </ul>
             <hr>
             <button id="submitOwnBtn" class="btn btn-secondary">Submit Your Own Image</button>
 
             <div id="uploadBox" class="hidden">
                 <form id="uploadForm" enctype="multipart/form-data">
-                    <input id="fileInput" type="file" name="profileImage" accept="image/*">
+                    <input id="fileInput" type="file">
                 </form>
             </div>
 
@@ -128,6 +126,100 @@ window.addEventListener('click', function(event) {
         modal.style.display = 'none';
     }
 });
+
+
+document.getElementById('changeAvatarBtn').addEventListener('click', function() {
+    document.getElementById('avatarModal').style.display = 'flex';
+});
+
+document.getElementById('closeModalBtn').addEventListener('click', function() {
+    document.getElementById('avatarModal').style.display = 'none';
+});
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('avatarModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+
+const avatarImages = document.querySelectorAll('.nav-profile');
+avatarImages.forEach(img => {
+    img.addEventListener('click', function() {
+        const selectedAvatar = img.getAttribute('data-avatar');
+        fetch('/update-avatar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ avatar: selectedAvatar })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                
+                document.querySelector('img[alt="User Profile Image"]').src = `/static/images/${selectedAvatar}`;
+
+                
+                const navImage = document.getElementById('navProfileImage');
+                if (navImage) {
+                    navImage.src = `/static/images/${selectedAvatar}`;
+                }
+
+                
+                document.getElementById('avatarModal').style.display = 'none';
+            } else {
+                alert('Failed to update avatar');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred');
+        });
+    });
+});
+
+
+document.getElementById('submitOwnBtn').addEventListener('click', function () {
+    document.getElementById('uploadBox').classList.toggle('hidden');
+});
+
+document.getElementById('fileInput').addEventListener('change', function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('profileImage', file);
+
+    fetch('/upload-profile-image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const profileImage = document.querySelector('img[alt="User Profile Image"]');
+            const navImage = document.getElementById('navProfileImage');
+
+            if (profileImage) {
+                profileImage.src = data.image_url;
+            }
+
+            if (navImage) {
+                navImage.src = data.image_url;
+            }
+
+            document.getElementById('avatarModal').style.display = 'none';
+        } else {
+            alert('Upload failed: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Upload error:', error);
+        alert('An error occurred during upload.');
+    });
+});
+
 </script>
 {% endblock %}
 

@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width", initial-scale="1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}"> 
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/page.css') }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
-        {% block head %}
-        {% endblock %}
-    </head>
-    <body class="{% block body_class %}{% endblock %}">
-        <nav class="navbar">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">FilmGraph</a>
-                </div>
-                <ul class="nav navbar-nav">
-                    <li id="Home"><a href="{{ url_for('home') }}">Home</a></li>
-                    <li id="Collections"><a href="{{ url_for('collection') }}">Collections</a></li>
-                    <li id="Stats"><a href="{{ url_for('stats') }}">Stats</a></li>
-                    <li id="Friends"><a href="{{ url_for('friends') }}">Friends</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="{{ url_for('profile') }}">
-                            {{username}}
-                        </a>
-                    </li>
-                    <li><img id="navbarProfile" src="{{ current_user.image or url_for('static', filename='images/placeholder.jpg') }}" class="nav-profile"></li>
-                    <li id="Logout"><a href="{{ url_for('logout') }}">Logout</a></li>
-                </ul>
-            </div>
-        </nav>
-    
-        {% block content %}
-        {% endblock %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/page.css') }}">
 
-        <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
-    </body>
+    {% block head %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">FilmGraph</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li id="Home"><a href="{{ url_for('home') }}">Home</a></li>
+                <li id="Collections"><a href="{{ url_for('collection') }}">Collections</a></li>
+                <li id="Stats"><a href="{{ url_for('stats') }}">Stats</a></li>
+                <li id="Friends"><a href="{{ url_for('friends') }}">Friends</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="{{ url_for('profile') }}">
+                        {{ current_user.username }}
+                    </a>
+                </li>
+                <li>
+                    <img id="navProfileImage" class="nav-profile"
+                        src="{{ url_for('static', filename='images/' + (current_user.profile_image or 'placeholder.jpg')) }}"
+                        alt="Profile" />
+                </li>
+                <li id="Logout"><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+</body>
 </html>
