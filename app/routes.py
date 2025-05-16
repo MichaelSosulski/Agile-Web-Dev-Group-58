@@ -384,7 +384,7 @@ def render_collection_page(add_form, show=None):
     for item in collections:
         if item['category'] == 'Watched' or item['category'] == 'Favourite':
             watchList.append(item)
-        elif item['category'] == 'Planning To Watch':
+        elif item['category'] == 'To Watch':
             planList.append(item)
         if item['category'] == 'Favourite':
             favList.append(item)

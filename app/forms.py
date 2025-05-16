@@ -52,20 +52,22 @@ class AddFilmForm(FlaskForm):
     submit_film = SubmitField("Add Film")
     
     def validate_watch_date(form, field):
-        if form.category.data == "Planning To Watch" and field.data:
+        if form.category.data == "To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
         if field.data and form.category.data == "Watched":
             if field.data > datetime.date.today():
                 raise ValidationError("Error: Watch date cannot be in the future")
+        elif form.category.data == "Watched" and not field.data:
+            raise ValidationError("Error: Please Select a date.")
 
     def validate_user_rating(form, field):
-        if form.category.data == "Planning To Watch" and field.data:
+        if form.category.data == "To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
         if form.category.data == "Watched" and not field.data:
             raise ValidationError("Error: Please input a rating")
 
     def validate_user_review(form, field):
-        if form.category.data == "Planning To Watch" and field.data:
+        if form.category.data == "To Watch" and field.data:
             raise ValidationError("Error: You haven't seen this film yet")
 
 # Friend management forms
