@@ -19,6 +19,10 @@
     <section class="container">
         <h2 class="sectionHeading">Watched</h2>
         <div class="movie-catalog">
+            {% if watchList|length == 0 %}
+                <p>No films here yet.</p>
+            {% endif %}
+
             {% for film in watchList %}
             <div class="movie-card">
                 <p>{{film.title}}</p>
@@ -28,6 +32,10 @@
         </div>
         <h2 class="sectionHeading">To Watch</h2>
         <div class="movie-catalog">
+            {% if planList|length == 0 %}
+                <p>No films here yet.</p>
+            {% endif %}
+
             {% for film in planList %}
             <div class="movie-card">
                 <p>{{film.title}}</p>
@@ -37,6 +45,9 @@
         </div>
     </section>
     <h2 class="sectionHeading">My Friends</h2>
+        {% if friends|length == 0 %}
+            <p>No friends here yet.</p>
+        {% endif %}
     <ul>
         {% for friend in friends %}
         <li style="list-style: none; padding: 0; margin: 16px 0; font-size: 1.2em;">
