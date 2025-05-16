@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    
-    <meta name="viewport" content="width=device-width", initial-scale="1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FilmGraph Welcome Page</title>
 
+    <!-- Link to Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
+    <!-- Your custom CSS files -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdown.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/container.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/hero.css') }}">
-
-
-    <title>FilmGraph Welcome Page</title>
-
-</head> 
+</head>
 <body>
+
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -47,7 +47,7 @@
                                         <span style="color:red;">[{{ error }}]</span>
                                         {% endfor %}
                                     </p>
-                                    <p> {{ lForm.submit_login() }}</p>
+                                    <p><button type="submit" name="submit_login" class="btn btn-primary">Login</button></p>
                                 </div>
                             </form>
                         </div>
@@ -80,7 +80,7 @@
                                         <span style="color:red;">[{{ error }}]</span>
                                         {% endfor %}
                                     </p>
-                                    <p> {{ sForm.submit_signup() }}</p>
+                                    <p><button type="submit" name="submit_signup" class="btn btn-success">Sign Up</button></p>
                                 </div>
                             </form>
                         </div>
@@ -90,6 +90,7 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section class="hero-section container-fluid">
         <div class="row min-vh-100">
             <div class="col-md-6 h-100 hero-text">
@@ -103,6 +104,7 @@
         </div>
     </section>
     
+    <!-- Features Preview Section -->
     <section class="feature-preview container">
         <p>We'll help you <strong>track films</strong> you've watched, <strong>analyse</strong> your binge stats, 
             and <strong>make friends</strong> to discover new films together.</p>
@@ -138,7 +140,9 @@
         </div>
     </section>
 
+    <!-- Include JavaScript at the end -->
     <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
 
 </body>
 </html>
+

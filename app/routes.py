@@ -13,45 +13,46 @@ def welcome():
     lForm = LoginForm()
     sForm = SignupForm()
 
-    if 'submit_login' in request.form and lForm.validate_on_submit():    
-        user = db.session.scalar(
-            sa.select(User).where(User.username == lForm.username.data))
-        if user is None or not user.check_password(lForm.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('welcome'))
-        login_user(user)
-        flash('Logged in successfully')
-        print("login sent")
-        return redirect('/Homepage')
-    
-    if 'submit_signup' in request.form and sForm.validate_on_submit():
-        user = User(username=sForm.username.data)
-        user.set_password(sForm.password.data) 
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered user!')
-        login_user(user)
-        flash('Welcome, you are now logged in!')
-        return redirect('/Homepage')
+    if request.method == 'POST':
+        if 'submit_login' in request.form and lForm.validate_on_submit():
+            # Login handling
+            user = db.session.scalar(sa.select(User).where(User.username == lForm.username.data))
+            if user is None or not user.check_password(lForm.password.data):
+                flash('Invalid username or password')
+                return redirect(url_for('welcome'))
+            login_user(user)
+            flash('Logged in successfully')
+            print("login sent")
+            return redirect(url_for('home'))  # Redirect to home (not '/Homepage')
+
+        if 'submit_signup' in request.form and sForm.validate_on_submit():
+            # Signup handling
+            user = User(username=sForm.username.data)
+            user.set_password(sForm.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            login_user(user)
+            flash('Welcome, you are now logged in!')
+            return redirect(url_for('home'))  # Redirect to home (not '/Homepage')
         
     return render_template('WelcomePage.html', lForm=lForm, sForm=sForm)
 
 @app.route('/Homepage')
 @login_required
 def home():
-    username = current_user.username
-
     popular = ["The Dark Knight", "The Godfather Part II", "12 Angry Men", "Schindler's List", 
-                "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
-    
+               "LOTR: Return of the King", "Pulp Fiction", "The Good, the Bad and the Ugly", "Fight Club"]
+
     collections = current_user.collection
     watchList = [(c.movie.title, c.movie.poster) for c in collections if c.category == 'Watched']
 
     recommended = [{"username": "Gary", "film": {"title": "Oppenheimer", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐⭐"}},
-                    {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
-                    {"username": "Sam", "film": {"title": "Jurassic Park", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐"}}]
+                   {"username": "Lauren", "film": {"title": "Ninja Turtles", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐"}},
+                   {"username": "Sam", "film": {"title": "Jurassic Park", "image": "static/images/placeholder.jpg", "rating": "⭐⭐⭐⭐"}}]
 
-    return render_template('homepage.html', username=username, popular=popular, watchList=watchList, recommended=recommended)
+    return render_template('homepage.html', popular=popular, watchList=watchList, recommended=recommended)
+
 
 @app.route('/Profile')
 @login_required
@@ -213,3 +214,31 @@ def collection():
 def logout():
     logout_user()
     return redirect(url_for('welcome'))
+
+
+
+UPLOAD_FOLDER = 'static/images/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+
+@app.route('/update-profile-image', methods=['POST'])
+def update_profile_image():
+    data = request.get_json()
+
+    if not data or 'image_url' not in data:
+        return jsonify({"success": False, "message": "Invalid request"}), 400
+
+    current_user.image = data['image_url']  # Store updated profile image
+    db.session.commit()
+
+    return jsonify({"success": True, "image_url": current_user.image})  # Ensure navbar uses the latest image
+
+
+
+

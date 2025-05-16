@@ -1,18 +1,78 @@
+/* Navbar styles */
 .navbar {
     background-color: #1C2331;
     margin-bottom: 0;
     padding-bottom: 0;
     border-radius: 0;
 }
-    
-.navbar a,.navbar-brand {
+
+.navbar a, .navbar-brand {
     color: #ffffff;
 }
-    
+
 .navbar li.active a {
     color: #b4d6f7;
 }
-    
+
 .navbar li a:hover {
     color: #1C2331;
 }
+
+
+.nav-profile {
+    width: 50px;
+    height: 50px;
+    object-fit: cover; 
+    object-position: center;
+    border-radius: 50%; 
+}
+
+
+.image-scroll {
+    display: flex;
+    gap: 10px; 
+    overflow-x: auto; 
+    white-space: nowrap; 
+    overflow-y: hidden; 
+    max-width: 100%; 
+    padding: 10px 0;
+}
+
+.image-scroll img {
+    flex-shrink: 0; 
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; 
+}
+
+.image-scroll::-webkit-scrollbar {
+    height: 8px; 
+}
+
+.image-scroll::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+}
+
+.image-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+@media (max-width: 768px) {
+    .image-scroll {
+        max-width: 100%;
+        flex-wrap: nowrap;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

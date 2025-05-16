@@ -10,7 +10,7 @@
         {% block head %}
         {% endblock %}
     </head>
-    <body>
+    <body class="{% block body_class %}{% endblock %}">
         <nav class="navbar">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -23,7 +23,12 @@
                     <li id="Friends"><a href="{{ url_for('friends') }}">Friends</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li id="Profile"><a href="{{ url_for('profile') }}">Profile</a></li>
+                    <li class="dropdown">
+                        <a href="{{ url_for('profile') }}">
+                            {{username}}
+                        </a>
+                    </li>
+                    <li><img id="navbarProfile" src="{{ current_user.image or url_for('static', filename='images/placeholder.jpg') }}" class="nav-profile"></li>
                     <li id="Logout"><a href="{{ url_for('logout') }}">Logout</a></li>
                 </ul>
             </div>

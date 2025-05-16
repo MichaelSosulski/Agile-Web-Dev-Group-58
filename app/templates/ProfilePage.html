@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
+{% block body_class %}profile-page{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
 <title>FilmGraph Profile Page</title>
 {% endblock %}
 
@@ -14,30 +16,82 @@
             <p>{{user.bio}}</p>
         </div>
         <div class="col-md-6">
-            <img src={{user.image}} alt="User Profile Image">
+            <img src="{{user.image}}" alt="User Profile Image">
+            <button id="changeAvatarBtn" class="btn btn-primary mt-2">Change avatar</button>
         </div>
-        
+    </div>
+
+    <!-- Modal -->
+    <div id="avatarModal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <h2>Select a default avatar or choose your own!</h2>
+            <ul class="avatar-category-list">
+
+                <li><h3>Star Wars</h3></li>
+                <div class="image-scroll">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/luke.jpg') }}" alt="Luke Skywalker" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/darth_vader.jpg') }}" alt="Darth Vader" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/yoda.jpg') }}" alt="Yoda" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/chewbacca.jpg') }}" alt="Chewbacca" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/han_solo.jpg') }}" alt="Han Solo" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/starwars/mandalorian.jpg') }}" alt="Mandalorian" class="nav-profile">
+                </div>
+
+                <li><h3>Simpsons</h3></li>
+                <div class="image-scroll">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/homer.png') }}" alt="Homer" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/bart.png') }}" alt="Bart" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/marge.png') }}" alt="Marge" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/lisa.png') }}" alt="Lisa" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/simpsons/maggie.jpg') }}" alt="Maggie" class="nav-profile">
+                </div>
+
+                <li><h3>Stranger Things</h3></li>
+                <div class="image-scroll">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/eleven.jpg') }}" alt="Eleven" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/hopper.jpg') }}" alt="Hopper" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/will.jpg') }}" alt="Will" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/nancy.jpg') }}" alt="Nancy" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/steve.jpg') }}" alt="Steve" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/vecna.jpg') }}" alt="Vecna" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/dustin.jpg') }}" alt="Dustin" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/lucas.jpg') }}" alt="Lucas" class="nav-profile">
+                    <img src="{{ url_for('static', filename='images/characters/strangerthings/max.jpg') }}" alt="Max" class="nav-profile">
+                </div>
+                
+            </ul>
+            <hr>
+            <button id="submitOwnBtn" class="btn btn-secondary">Submit Your Own Image</button>
+
+            <div id="uploadBox" class="hidden">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input id="fileInput" type="file" name="profileImage" accept="image/*">
+                </form>
+            </div>
+
+            
+
+            <br><br>
+            <button id="closeModalBtn" class="btn btn-danger">Close</button>
+        </div>
     </div>
 
     <h2 style="font-weight: bold; text-decoration: underline;">My Collections</h2>
     <section class="container">
         <h3>Watch List</h3>
         <div class="movie-catalog">
-            <div class="movie-catalog">
-                {% for movie in watchList %}
-                <div class="movie-card">{{movie}}</div>
-                {% endfor %}
-            </div>
+            {% for movie in watchList %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
         </div>
         <h3>Favourites</h3>
         <div class="movie-catalog">
-            <div class="movie-catalog">
-                {% for movie in favList %}
-                <div class="movie-card">{{movie}}</div>
-                {% endfor %}
-            </div>
+            {% for movie in favList %}
+            <div class="movie-card">{{movie}}</div>
+            {% endfor %}
         </div>
     </section>
+
     <h2 style="font-weight: bold; text-decoration: underline;">My Stats</h2>
     <div class="row">
         <div class="col-md-6">
@@ -47,11 +101,33 @@
             <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Films" class="img-fluid">
         </div>
     </div>
+
     <h2 style="font-weight: bold; text-decoration: underline;">My Friends</h2>
     <ul>
         {% for friend in friends %}
-        <li><img src={{friend.image}} alt="{{friend.username}} Picture" style="width:20px; height:20px; vertical-align:middle; margin-right:8px;">{{friend.username}}</li>
+        <li>
+            <img src="{{friend.image}}" alt="{{friend.username}} Picture" style="width:20px; height:20px; vertical-align:middle; margin-right:8px;">
+            {{friend.username}}
+        </li>
         {% endfor %}
     </ul>
 </div>
+
+<script>
+document.getElementById('changeAvatarBtn').addEventListener('click', function() {
+    document.getElementById('avatarModal').style.display = 'flex';
+});
+
+document.getElementById('closeModalBtn').addEventListener('click', function() {
+    document.getElementById('avatarModal').style.display = 'none';
+});
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('avatarModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+</script>
 {% endblock %}
+
