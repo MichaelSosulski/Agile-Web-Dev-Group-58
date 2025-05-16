@@ -2,11 +2,11 @@
 	<tr>
 		<td width="70px">
 			{% if post.author == current_user %}
-                <a href="{{ url_for('user', username=post.recipient.username) }}">
+                <a href="{{ url_for('main.user', username=post.recipient.username) }}">
                     <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" style="width:32px; height:32px;"/>
                 </a>
             {% else %}
-                <a href="{{ url_for('user', username=post.author.username) }}">
+                <a href="{{ url_for('main.user', username=post.author.username) }}">
                     <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" style="width:32px; height:32px;"/>
                 </a>
             {% endif %}
@@ -18,11 +18,11 @@
                 {% else %}
                     You said to 
                 {% endif %}
-                <a class="user_popup" href="{{ url_for('user', username=post.recipient.username) }}">
+                <a class="user_popup" href="{{ url_for('main.user', username=post.recipient.username) }}">
                     {{ post.recipient.username }}
                 </a>
             {% else %}
-                <a class="user_popup" href="{{ url_for('user', username=post.author.username) }}">
+                <a class="user_popup" href="{{ url_for('main.user', username=post.author.username) }}">
                     {{ post.author.username }}
                 </a> 
                 {% if '<' ~ 'img' in post.body %}

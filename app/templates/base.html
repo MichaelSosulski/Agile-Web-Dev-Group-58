@@ -17,16 +17,16 @@
                     <a class="navbar-brand" href="#">FilmGraph</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li id="Home"><a href="{{ url_for('home') }}">Home</a></li>
-                    <li id="Collections"><a href="{{ url_for('collection') }}">Collections</a></li>
-                    <li id="Stats"><a href="{{ url_for('stats') }}">Stats</a></li>
-                    <li id="Friends"><a href="{{ url_for('friends') }}">Friends</a></li>
-                    <li class="nav-item"><a href="{{ url_for('messages') }}">Messages</a>
+                    <li id="Home"><a href="{{ url_for('main.home') }}">Home</a></li>
+                    <li id="Collections"><a href="{{ url_for('main.collection') }}">Collections</a></li>
+                    <li id="Stats"><a href="{{ url_for('main.stats') }}">Stats</a></li>
+                    <li id="Friends"><a href="{{ url_for('main.friends') }}">Friends</a></li>
+                    <li class="nav-item"><a href="{{ url_for('main.messages') }}">Messages</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li id="Profile"><a href="{{ url_for('profile') }}">Profile</a></li>
-                    <li id="Logout"><a href="{{ url_for('logout') }}">Logout</a></li>
+                    <li id="Profile"><a href="{{ url_for('main.profile') }}">Profile</a></li>
+                    <li id="Logout"><a href="{{ url_for('main.logout') }}">Logout</a></li>
                 </ul>
             </div>
         </nav>

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
     {% block head %} 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/movie.css') }}">
+    <link rel="stylesheet" href="{{ 
+                                 ('static', filename='css/movie.css') }}">
 
     <title>FilmGraph Friends Page</title>
     {% endblock %}
@@ -24,8 +25,8 @@
                             {{ user.username }}
                         </div>
                         <div>
-                            <a href="{{ url_for('accept_request', username=user.username) }}" class="btn btn-sm btn-success me-1">Accept</a>
-                            <a href="{{ url_for('decline_request', username=user.username) }}" class="btn btn-sm btn-danger">Decline</a>
+                            <a href="{{ url_for('main.accept_request', username=user.username) }}" class="btn btn-sm btn-success me-1">Accept</a>
+                            <a href="{{ url_for('main.decline_request', username=user.username) }}" class="btn btn-sm btn-danger">Decline</a>
                         </div>
                     </li>
                     {% endfor %}
@@ -41,12 +42,14 @@
                     <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" 
                         alt="{{ friend.username }} avatar" class="rounded-circle mr-3" width="40" height="40">
                     {{ friend.username }}
-                    <form action="{{ url_for('remove_friend', username=friend.username) }}" method="get" style="display: inline;">
+              
+                    <form action="{{ url_for('main.remove_friend', username=friend.username) }}" method="get" style="display: inline;">
                         <button type="submit" class="btn btn-sm btn-danger ms-auto">Remove Friend</button>
                     </form>
-                    <form action="{{ url_for('send_message', recipient=friend.username) }}" method="get" style="display: inline;">
+                    <form action="{{ url_for('main.send_message', recipient=friend.username) }}" method="get" style="display: inline;">
                         <button type="submit" class="btn btn-sm btn-outline-primary me-2">Send Message</button>
                     </form>
+              
                     </li>
                     {% endfor %}
                 </ul>
@@ -65,13 +68,14 @@
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             {% if user.user_id in pending_recipient_ids %}
-                            <form method="POST" action="{{ url_for('cancel_request', username=user.username) }}"
+
+                            <form method="POST" action="{{ url_for('main.cancel_request', username=user.username) }}"
                                 class="d-flex align-items-center mb-0">
                                 {{ cancel_request_form.hidden_tag() }}
                                 <button type="submit" class="btn btn-warning btn-sm">Cancel Request</button>
                             </form>
                             {% else %}
-                            <form method="POST" action="{{ url_for('send_request', username=user.username) }}"
+                            <form method="POST" action="{{ url_for('main.send_request', username=user.username) }}"
                                 class="d-flex align-items-center mb-0">
                                 {{ send_request_form.hidden_tag() }}
                                 {{ send_request_form.submit(class="btn btn-primary btn-sm") }}

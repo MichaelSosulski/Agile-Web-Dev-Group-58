@@ -21,7 +21,7 @@
         <div class="dropdown">
             <button id="addBtn" class="btn btn-secondary" type="button">Add New Film</button>
             <div id="addDropdown" class="dropdown-content drop-left">
-                <form name="addFilmForm" action="{{ url_for('add_film') }}" method="post">
+                <form name="addFilmForm" action="{{ url_for('main.add_film') }}" method="post">
                     <!--includes the csrf token and hidden film data fields-->
                     {{ add_form.hidden_tag() }}
                     <p>
