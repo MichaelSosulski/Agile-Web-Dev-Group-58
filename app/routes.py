@@ -1,12 +1,13 @@
 from flask import request, redirect, url_for, render_template, flash
 from app import app, db
-from app.models import Movie, Collection, User, MovieGenre, Friend
+from app.models import Movie, Collection, User, MovieGenre, Friend, Message
 from datetime import datetime
 from flask_login import current_user, login_user, login_required, logout_user
 import sqlalchemy as sa
-from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm, CancelRequestForm
+from app.forms import LoginForm, SignupForm, AddFilmForm, SendRequestForm, AcceptRequestForm, DeclineRequestForm, RemoveFriendForm, CancelRequestForm, MessageForm
 from flask import jsonify
-from sqlalchemy import func
+from sqlalchemy import func, or_
+from flask_babel import _, lazy_gettext as _l
 
 @app.route('/', methods=['GET', 'POST'])
 def welcome():
@@ -27,7 +28,7 @@ def welcome():
                 login_user(user)
                 flash('Logged in successfully', 'success')
                 return redirect('/Homepage')
-              
+
     elif 'submit_signup' in request.form:
         show = 'signup'
         if sForm.validate_on_submit():
@@ -85,6 +86,18 @@ def profile():
                 {"username":"Friend_4", "image":"static/images/placeholder.jpg"},
                 {"username":"Friend_5", "image":"static/images/placeholder.jpg"}]
     
+    return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+
+    # Example: get user's watchList, favList, and friends from the database
+    watchList = user.watch_list_items  # adapt to your actual model
+    favList = user.favorite_items      # adapt to your actual model
+    friends = user.friends             # assuming user.friends is a list of User objects
+
     return render_template('ProfilePage.html', user=user, watchList=watchList, favList=favList, friends=friends)
 
 @app.route('/Friends')
@@ -212,6 +225,32 @@ def remove_friend(username):
         db.session.commit()
 
     return redirect(url_for('friends'))
+
+@app.route('/send_message/<recipient>', methods=['GET', 'POST'])
+@login_required
+def send_message(recipient):
+    user = db.first_or_404(sa.select(User).where(User.username == recipient))
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=current_user, recipient=user, body=form.message.data)
+        db.session.add(msg)
+        db.session.commit()
+        flash(_('Your message has been sent.'))
+        return redirect(url_for('messages', username=recipient))
+    return render_template('sendMessage.html', title=_('Send Message'), form=form, recipient=recipient)
+
+@app.route('/messages')
+@login_required
+def messages():
+    # Get all messages sent and received, ordered by newest first
+    messages = Message.query.filter(
+        or_(
+            Message.author == current_user,
+            Message.recipient == current_user
+        )
+    ).order_by(Message.timestamp.desc()).all()
+
+    return render_template('messages.html', messages=messages, current_user=current_user)
 
 @app.route('/Stats')
 @login_required
@@ -361,12 +400,12 @@ def rm_film():
     if request.method == 'POST':
         id = request.form['id']
         film = Collection.query.join(Movie).filter(Collection.user_id == user_id,
-           Movie.movie_id == id).one_or_none()
+            Movie.movie_id == id).one_or_none()
         if film != None:
             db.session.delete(film)
             db.session.commit()
         else:
-           flash("Can't delete non-existent collection item.")
+            flash("Can't delete non-existent collection item.")
     return redirect(url_for('collection'))
 
 @app.route('/get_film/<query>')
@@ -396,6 +435,7 @@ def collection():
     return render_template('CollectionPage.html', add_form=add_film_form, watchList=watchList, favList=favList, planList=planList)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('welcome'))
